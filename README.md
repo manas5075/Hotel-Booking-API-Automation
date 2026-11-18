@@ -1,68 +1,73 @@
-Project maintained by Manas Behera.
-# Kata API Testing in Java
+# Hotel Booking API Automation Framework
 
-API Testing and Java Exercise: Setting up a Basic API Test Automation Framework.
+**Project maintained by:** Manas Behera
 
-## Objective
-The objective of this exercise is to evaluate your knowledge on API testing and Java by setting up a basic API Test Automation framework using Rest-Assured and Cucumber. You will need to create a test suite that executes a few tests against one endpoint of a hotel booking website and evaluates their responses.
+## 1. Project Overview
 
-## Background
-The application under test is a simple hotel booking website where you can book a room and also send a form with a request.
+This project is a Java-based REST API test automation framework.
 
-The website can be accessed at https://automationintesting.online/.
+The objective is to demonstrate practical knowledge of API testing, Java programming, automation framework design, and Behaviour-Driven Development (BDD).
 
-The Swagger documentation for the two endpoints you will be testing can be found at:
+The framework uses **Rest Assured** to interact with REST APIs and **Cucumber** to define test scenarios in readable Gherkin syntax.
 
-Booking endpoint: https://automationintesting.online/booking/swagger-ui/index.html  
-Optionally, you also have the Authentican endpoint: https://automationintesting.online/auth/swagger-ui/index.html
+The application under test is a hotel booking system that provides REST endpoints for creating, retrieving, updating, and deleting bookings, as well as user authentication.
 
-### Swagger
-This website is an external application which is not in our control.  
-We noticed that the Swagger documentation is sometimes not available on the mentioned URL above.  
-As a backup, you can find the Swagger documentation in this repository at [src/test/resources/spec/booking.yaml](src/test/resources/spec/booking.yaml)
+## 2. Project Objectives
 
-The Open API Spec file is only supported in the Ultimate version of IntelliJ IDEA. But you can copy the content of the file and paste it in an online Swagger editor like https://editor.swagger.io/ to visualize the API documentation.
+The main objectives of this project are to:
 
-### Authentication
-In order to authenticate yourself, the required credentials are:
-* Username: `admin`
-* Password: `password`
+- Build a reusable API test automation framework using Java.
+- Automate REST API tests using Rest Assured.
+- Implement BDD using Cucumber and Gherkin.
+- Validate HTTP status codes, response bodies, and API behaviour.
+- Cover positive and negative testing scenarios.
+- Apply suitable design patterns to improve maintainability and reusability.
+- Manage project configuration and test data separately.
+- Use Git for version control and maintain a clear commit history.
 
-## Task
-You are provided with an extremely basic API test project.
+## 3. Application Under Test
 
-Please clone the project and create a new branch with your name. At the end, please push your branch to this project.
+This uses the Restful Booker hotel booking application.
 
-The project to start from, can be found here: https://github.com/freddyschoeters/API_Testing_kata
+**Application:**  
+https://automationintesting.online/
 
-Your task is to set up an API Test Automation framework from this project using Java, Rest-Assured, and Cucumber (feel free to add more dependencies if required).
+**API base URL:**
+`https://automationintesting.online/api`
 
-It is up to you to define the test cases. You don’t need to have a full coverage, but you need to show enough variation on the types of tests that you would need to write and execute, and what to check in the response.
+**API documentation:**
 
-This kata has the purpose to evaluate both your technical skills as well as your testing skills.
+- [Booking API Swagger Documentation](https://automationintesting.online/booking/swagger-ui/index.html)
+- [Authentication API Swagger Documentation](https://automationintesting.online/auth/swagger-ui/index.html)
 
-`For this task, you will use the booking endpoint.`
+### OpenAPI Specification
+
+The OpenAPI specification is maintained locally in this repository:
+
+`src/test/resources/spec/booking.yaml`
+
+This file serves as the reference for API endpoints, request structures, response formats, and validation rules.
+
+## 4. Technologies and Tools
+
+| Technology | Purpose |
+|---|---|
+| Java 17 | Programming language |
+| Maven | Build and dependency management |
+| Rest Assured | REST API automation |
+| Cucumber | BDD and Gherkin scenarios |
+| JUnit 5 | Test execution |
+| Jackson | JSON serialization and deserialization |
+| Lombok | Java boilerplate reduction, where applicable |
+| Git | Version control |
+| GitHub | Source code repository |
+| SoapUI | Planned API mocking and local response validation |
 
 
-## Requirements
-* Use Java as the programming language
-* Use Rest-Assured as the API testing library
-* Use Cucumber as the BDD framework
-* Design your codebase using a proper Java design pattern
-* Write good tests with correct checks
-* Use Git for version control and push your codebase to an open GitHub repository
-* Make regular commits to demonstrate your progress
+---
 
+**Author:** Manas Behera
 
-## Deliverables
-* Your branch pushed in the provided project.
-* A comprehensive test suite covering the scenarios mentioned above
-* A well-structured codebase with proper design patterns and comments
-* Regular commits demonstrating your progress
+**Project:** Hotel Booking API Automation
 
-## Evaluation Criteria
-* Being able to successfully run the tests
-* Correctness and completeness of the test suite
-* Quality of the codebase (design patterns, structure, code quality, …)
-* Use of Rest-Assured and Cucumber features
-* Commit history and progress demonstration
+**Purpose:** Java API Test Automation Practice
