@@ -5,6 +5,7 @@ import framework.specification.RequestSpecFactory;
 import io.restassured.response.Response;
 import framework.constants.ApiConstants;
 import static io.restassured.RestAssured.given;
+import framework.utils.RetryUtils;
 
 public class BookingClient {
 
@@ -20,14 +21,16 @@ public class BookingClient {
                 .post(BOOKING_ENDPOINT);
     }
 
-    // Get a booking by ID
+    // Get a booking by ID with retry support
     public Response getBooking(int bookingId, String token) {
 
-        return given()
-                .spec(RequestSpecFactory.getRequestSpecification())
-                .cookie("token", token)
-                .when()
-                .get(BOOKING_ENDPOINT + "/" + bookingId);
+        return RetryUtils.executeWithRetry(() ->
+                given()
+                        .spec(RequestSpecFactory.getRequestSpecification())
+                        .cookie("token", token)
+                        .when()
+                        .get(BOOKING_ENDPOINT + "/" + bookingId)
+        );
     }
 
     // Update an entire booking

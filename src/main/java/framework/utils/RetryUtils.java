@@ -20,7 +20,18 @@ public final class RetryUtils {
     public static Response executeWithRetry(
             Supplier<Response> request) {
 
-        int maxRetries = ApiConfig.getRetryCount();
+        return executeWithRetry(request, ApiConfig.getRetryCount());
+    }
+
+    // Package-private overload for unit testing
+    static Response executeWithRetry(
+            Supplier<Response> request, int maxRetries) {
+
+        if (maxRetries < 0) {
+            throw new IllegalArgumentException(
+                    "Retry count cannot be negative");
+        }
+
         int attempt = 0;
 
         while (true) {
@@ -35,8 +46,7 @@ public final class RetryUtils {
                 attempt++;
 
                 System.out.println(
-                        "Retrying request. Attempt: " + attempt
-                );
+                        "Retrying request. Attempt: " + attempt);
 
                 waitBeforeRetry();
 
@@ -51,8 +61,7 @@ public final class RetryUtils {
 
                 System.out.println(
                         "Retrying after connection failure. Attempt: "
-                                + attempt
-                );
+                                + attempt);
 
                 waitBeforeRetry();
             }
@@ -93,8 +102,7 @@ public final class RetryUtils {
             Thread.currentThread().interrupt();
 
             throw new IllegalStateException(
-                    "Retry interrupted", exception
-            );
+                    "Retry interrupted", exception);
         }
     }
 }
