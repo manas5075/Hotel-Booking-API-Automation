@@ -76,7 +76,7 @@
     		<artifactId>jackson-databind</artifactId>
     		<version>2.18.3</version>
 		</dependency>
-
+		
     </dependencies>
 
     <build>
@@ -106,9 +106,9 @@
                 <version>1.2.2</version>
                 <configuration>
                     <sourceDirectory>
-                        ${project.basedir}/src/test/resources/json
+                        ${project.basedir}/src/test/resources/testdata
                     </sourceDirectory>
-                    <targetPackage>org.example.models</targetPackage>
+                    <targetPackage>com.booking.models</targetPackage>
                     <sourceType>json</sourceType>
                     <annotationStyle>jackson2</annotationStyle>
                     <includeJsr303Annotations>false</includeJsr303Annotations>

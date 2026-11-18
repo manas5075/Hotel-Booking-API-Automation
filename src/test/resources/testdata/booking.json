@@ -1,0 +1,12 @@
+{
+  "roomid": 2,
+  "firstname": "Manas",
+  "lastname": "Behera",
+  "depositpaid": true,
+  "bookingdates": {
+    "checkin": "2027-01-01",
+    "checkout": "2027-01-05"
+  },
+  "email": "m.b@gmail.com",
+  "phone": "12345678901"
+}
