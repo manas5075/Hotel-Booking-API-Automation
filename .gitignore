@@ -37,6 +37,7 @@ build/
 ### Log files ###
 *.log
 logs/
+test-run-log.txt
 
 ### Test reports ###
 allure-results/
