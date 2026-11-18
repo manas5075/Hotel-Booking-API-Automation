@@ -652,8 +652,26 @@ Check:
 - Authorization requirements for protected endpoints.
 
 ---
+## 15. Framework Features
 
-## 15. Future Enhancements
+### Parallel Execution
+- Supports parallel execution of Cucumber scenarios using JUnit 5.
+- Configured through `junit-platform.properties`.
+- Currently configured to execute a maximum of 2 scenarios concurrently.
+- Uses scenario-level context (`ScenarioContext`) to isolate authentication tokens, responses, and booking IDs.
+- Designed to reduce shared-state conflicts during concurrent test execution.
+
+### Retry Mechanism
+- Includes a reusable `RetryUtils` utility for handling transient API failures.
+- Supports retries for HTTP 429, 502, 503, and 504 responses.
+- Handles selected temporary connection failures.
+- Retry count is configurable through environment-specific properties files.
+- Uses `retry.count=0` by default, so retries are currently disabled.
+- Each retry waits 500 milliseconds before the next attempt.
+- Initially integrated with GET booking requests only.
+
+
+## 16. Future Enhancements
 
 The framework will continue to evolve with the following improvements:
 
@@ -672,7 +690,7 @@ The framework will continue to evolve with the following improvements:
 
 ---
 
-## 16. Author
+## 17. Author
 
 **Manas Behera**
 
