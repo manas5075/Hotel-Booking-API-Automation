@@ -7,18 +7,38 @@ import static io.restassured.RestAssured.given;
 
 import framework.specification.RequestSpecFactory;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class AuthClient {
+
+    private static final Logger logger =
+            LogManager.getLogger(AuthClient.class);
 
     private static final String LOGIN_ENDPOINT = "/auth/login";
 
     // Authenticate user and retrieve token
     public Response login(String username, String password) {
 
-        return given()
+        logger.info("Sending authentication request to {}", LOGIN_ENDPOINT);
+
+        Response response = given()
                 .spec(RequestSpecFactory.getRequestSpecification())
                 .body(createLoginRequest(username, password))
                 .when()
                 .post(LOGIN_ENDPOINT);
+
+        logger.info("Authentication response received. Status code: {}",
+                response.getStatusCode());
+
+        if (response.getStatusCode() == 200) {
+            logger.info("Authentication successful.");
+        } else {
+            logger.error("Authentication failed. Status code: {}",
+                    response.getStatusCode());
+        }
+
+        return response;
     }
 
     // Create login request body

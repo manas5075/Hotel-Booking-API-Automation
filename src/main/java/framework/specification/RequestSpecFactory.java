@@ -1,7 +1,9 @@
+
 package framework.specification;
 
 import framework.config.ApiConfig;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.ErrorLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
@@ -17,6 +19,7 @@ public final class RequestSpecFactory {
                 .setBaseUri(ApiConfig.getBaseUrl())
                 .setContentType(ContentType.JSON)
                 .setAccept(ContentType.JSON)
+                .addFilter(new ErrorLoggingFilter())
                 .build();
     }
 }
