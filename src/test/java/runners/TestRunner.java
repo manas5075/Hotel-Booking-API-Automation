@@ -13,7 +13,7 @@ import static io.cucumber.core.options.Constants.FILTER_TAGS_PROPERTY_NAME;
 
 @ConfigurationParameter(
     key = GLUE_PROPERTY_NAME,
-    value = "stepdefinitions"
+    value = "stepdefinitions,hooks"
 )
 
 @ConfigurationParameter(

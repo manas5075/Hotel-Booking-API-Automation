@@ -3,12 +3,12 @@ package framework.clients;
 
 import framework.specification.RequestSpecFactory;
 import io.restassured.response.Response;
-
+import framework.constants.ApiConstants;
 import static io.restassured.RestAssured.given;
 
 public class BookingClient {
 
-    private static final String BOOKING_ENDPOINT = "/booking";
+	private static final String BOOKING_ENDPOINT = ApiConstants.BOOKING;
 
     // Create a booking
     public Response createBooking(Object requestBody) {
