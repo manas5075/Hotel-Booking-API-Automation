@@ -33,3 +33,16 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Log files ###
+*.log
+logs/
+
+### Test reports ###
+allure-results/
+allure-report/
+
+### Environment files and secrets ###
+.env
+.env.*
+!.env.example
