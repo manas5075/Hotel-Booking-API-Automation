@@ -1,5 +1,5 @@
 
-package com.booking;
+package runners;
 
 import org.junit.platform.suite.api.*;
 
@@ -9,10 +9,12 @@ import static io.cucumber.core.options.Constants.FILTER_TAGS_PROPERTY_NAME;
 
 @Suite
 @IncludeEngines("cucumber")
-@SelectPackages("com.booking")
 @SelectClasspathResource("features")
 
-@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.booking")
+@ConfigurationParameter(
+    key = GLUE_PROPERTY_NAME,
+    value = "stepdefinitions"
+)
 
 @ConfigurationParameter(
     key = PLUGIN_PROPERTY_NAME,

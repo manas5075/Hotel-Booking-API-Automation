@@ -1,6 +1,6 @@
-package com.booking.factory;
+package framework.specification;
 
-import com.booking.config.ApiConfig;
+import framework.config.ApiConfig;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;

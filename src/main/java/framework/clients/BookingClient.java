@@ -1,7 +1,7 @@
 
-package com.booking.clients;
+package framework.clients;
 
-import com.booking.factory.RequestSpecFactory;
+import framework.specification.RequestSpecFactory;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;

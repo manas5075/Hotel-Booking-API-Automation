@@ -1,4 +1,4 @@
-package com.booking.config;
+package framework.config;
 
 import java.io.IOException;
 import java.io.InputStream;

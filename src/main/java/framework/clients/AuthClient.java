@@ -1,11 +1,11 @@
 
-package com.booking.clients;
+package framework.clients;
 
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
 
-import com.booking.factory.RequestSpecFactory;
+import framework.specification.RequestSpecFactory;
 
 public class AuthClient {
 

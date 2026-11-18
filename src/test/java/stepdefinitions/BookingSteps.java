@@ -1,7 +1,5 @@
 
-package com.booking.stepdefinitions;
-
-import com.booking.clients.BookingClient;
+package stepdefinitions;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -9,6 +7,8 @@ import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import framework.clients.BookingClient;
 
 public class BookingSteps {
 

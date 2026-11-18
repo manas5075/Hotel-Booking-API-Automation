@@ -1,9 +1,7 @@
-package com.booking.factory;
+package framework.specification;
 
 import org.junit.jupiter.api.Test;
-
 import io.restassured.specification.RequestSpecification;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class RequestSpecFactoryTest {
