@@ -7,12 +7,15 @@ import java.io.InputStream;
 import com.booking.models.Booking;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class BookingBuilder {
+public final class BookingBuilder {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    public static Booking createValidBooking() {
+    private BookingBuilder() {
+        // Prevent object creation
+    }
 
+    public static Booking createValidBooking() {
         try (InputStream inputStream =
                      BookingBuilder.class.getClassLoader()
                              .getResourceAsStream("testdata/booking.json")) {
@@ -28,5 +31,32 @@ public class BookingBuilder {
             throw new IllegalStateException(
                     "Unable to read booking test data", e);
         }
+    }
+
+    public static Booking createBookingWithNameLengths(
+            int firstnameLength, int lastnameLength) {
+
+        Booking booking = createValidBooking();
+
+        booking.setFirstname("A".repeat(firstnameLength));
+        booking.setLastname("B".repeat(lastnameLength));
+
+        return booking;
+    }
+
+    public static Booking createBookingWithPhoneLength(int phoneLength) {
+
+        Booking booking = createValidBooking();
+        booking.setPhone("1".repeat(phoneLength));
+
+        return booking;
+    }
+
+    public static Booking createBookingWithEmail(String email) {
+
+        Booking booking = createValidBooking();
+        booking.setEmail(email);
+
+        return booking;
     }
 }

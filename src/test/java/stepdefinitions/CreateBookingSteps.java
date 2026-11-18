@@ -1,0 +1,158 @@
+
+package stepdefinitions;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import com.booking.builders.BookingBuilder;
+import com.booking.models.Booking;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import framework.clients.BookingClient;
+import assertions.ApiAssertions;
+
+import io.cucumber.java.en.When;
+import io.cucumber.java.en.Then;
+import io.restassured.response.Response;
+
+import java.util.List;
+
+public class CreateBookingSteps {
+
+    private final BookingClient bookingClient = new BookingClient();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    private Response response;
+    private Object requestBody;
+    private Booking booking;
+
+    @When("I create a booking with valid details")
+    public void createBookingWithValidDetails() {
+
+        booking = BookingBuilder.createValidBooking();
+        requestBody = booking;
+
+        response = bookingClient.createBooking(requestBody);
+    }
+
+    @When("I create a booking with firstname length {int}, lastname length {int} and phone length {int}")
+    public void createBookingWithBoundaryValues(
+            int firstnameLength, int lastnameLength, int phoneLength) {
+
+        booking = BookingBuilder.createBookingWithNameLengths(
+                firstnameLength, lastnameLength);
+
+        booking.setPhone("1".repeat(phoneLength));
+
+        requestBody = booking;
+        response = bookingClient.createBooking(requestBody);
+    }
+
+    @When("I create a booking with firstname length {int} and lastname length {int}")
+    public void createBookingWithInvalidNameLengths(
+            int firstnameLength, int lastnameLength) {
+
+        requestBody = BookingBuilder.createBookingWithNameLengths(
+                firstnameLength, lastnameLength);
+
+        response = bookingClient.createBooking(requestBody);
+    }
+
+    @When("I create a booking with phone length {int}")
+    public void createBookingWithInvalidPhoneLength(int phoneLength) {
+
+        requestBody = BookingBuilder.createBookingWithPhoneLength(phoneLength);
+
+        response = bookingClient.createBooking(requestBody);
+    }
+
+    @When("I create a booking with email {string}")
+    public void createBookingWithInvalidEmail(String email) {
+
+        requestBody = BookingBuilder.createBookingWithEmail(email);
+
+        response = bookingClient.createBooking(requestBody);
+    }
+
+    @When("I create a booking with checkout date before checkin date")
+    public void createBookingWithInvalidBookingDates() {
+
+        ObjectNode bookingJson = objectMapper.valueToTree(
+                BookingBuilder.createValidBooking());
+
+        ObjectNode bookingDates = (ObjectNode) bookingJson.get("bookingdates");
+
+        bookingDates.put("checkin", "2026-12-10");
+        bookingDates.put("checkout", "2026-12-05");
+
+        requestBody = bookingJson;
+        response = bookingClient.createBooking(requestBody);
+    }
+
+    @When("I create a booking without the {word} field")
+    public void createBookingWithoutRequiredField(String fieldName) {
+
+        ObjectNode bookingJson = objectMapper.valueToTree(
+                BookingBuilder.createValidBooking());
+
+        bookingJson.remove(fieldName);
+
+        requestBody = bookingJson;
+        response = bookingClient.createBooking(requestBody);
+    }
+/*
+    @Then("the booking response should match the JSON schema")
+    public void verifyBookingResponseSchema() {
+
+        ApiAssertions.assertBookingResponseSchema(response);
+    }
+*/
+    @Then("the booking ID should be generated")
+    public void verifyBookingIdIsGenerated() {
+
+        int bookingId = response.jsonPath().getInt("bookingid");
+
+        assertTrue(bookingId > 0,
+                "Expected a valid booking ID in the response");
+    }
+
+    @Then("the created booking details should match the request")
+    public void verifyCreatedBookingDetails() {
+
+        assertNotNull(booking);
+
+        assertEquals(
+                booking.getFirstname(),
+                response.jsonPath().getString("booking.firstname"));
+
+        assertEquals(
+                booking.getLastname(),
+                response.jsonPath().getString("booking.lastname"));
+
+        assertEquals(
+                booking.getEmail(),
+                response.jsonPath().getString("booking.email"));
+
+        assertEquals(
+                booking.getPhone(),
+                response.jsonPath().getString("booking.phone"));
+
+        assertEquals(
+                booking.getRoomid(),
+                response.jsonPath().getInt("booking.roomid"));
+    }
+
+    @Then("the booking creation should be rejected with validation errors")
+    public void verifyBookingValidationErrors() {
+
+        assertEquals(400, response.getStatusCode(),
+                "Expected HTTP 400 for invalid booking data");
+
+        List<String> errors = response.jsonPath().getList("errors");
+
+        assertNotNull(errors, "Expected validation errors in response");
+        assertFalse(errors.isEmpty(),
+                "Expected at least one validation error");
+    }
+}
