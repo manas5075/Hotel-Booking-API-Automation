@@ -5,6 +5,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
+import assertions.ApiAssertions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,4 +32,11 @@ public class BookingSteps {
 
         assertEquals(expectedStatusCode, response.getStatusCode());
     }
+    
+
+    @Then("the booking response should match the JSON schema")
+    public void verifyBookingResponseSchema() {
+    	ApiAssertions.assertBookingResponseSchema(response);
+    }
+
 }
