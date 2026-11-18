@@ -10,6 +10,7 @@ import com.booking.models.Booking;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import assertions.ApiAssertions;
 import context.ScenarioContext;
 import framework.clients.BookingClient;
 
@@ -36,6 +37,11 @@ public class CreateBookingSteps {
 
         booking = BookingBuilder.createValidBooking();
         requestBody = booking;
+
+        ApiAssertions.assertRequestSchema(
+                requestBody,
+                "schemas/request/create-booking-request-schema.json"
+        );
 
         sendBookingRequest();
     }
@@ -131,6 +137,13 @@ public class CreateBookingSteps {
 
     @Then("the booking ID should be generated")
     public void verifyBookingIdIsGenerated() {
+
+        ApiAssertions.assertStatusCode(response, 200);
+
+        ApiAssertions.assertResponseSchema(
+                response,
+                "schemas/response/create-booking-success-response-schema.json"
+        );
 
         int bookingId = response.jsonPath().getInt("bookingid");
 
