@@ -1,3 +1,4 @@
+Project maintained by Manas Behera.
 # Kata API Testing in Java
 
 API Testing and Java Exercise: Setting up a Basic API Test Automation Framework.
