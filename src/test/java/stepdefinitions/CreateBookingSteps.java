@@ -136,6 +136,8 @@ public class CreateBookingSteps {
 
         assertTrue(bookingId > 0,
                 "Expected a valid booking ID in the response");
+
+        scenarioContext.setBookingId(bookingId);
     }
 
     @Then("the created booking details should match the request")

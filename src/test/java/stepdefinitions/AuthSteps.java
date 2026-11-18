@@ -1,8 +1,8 @@
 
 package stepdefinitions;
 
+import context.ScenarioContext;
 import framework.clients.AuthClient;
-import framework.utils.TokenManager;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
@@ -13,8 +13,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class AuthSteps {
 
+    private final ScenarioContext scenarioContext;
     private AuthClient authClient;
     private Response response;
+
+    public AuthSteps(ScenarioContext scenarioContext) {
+        this.scenarioContext = scenarioContext;
+    }
 
     @Given("the authentication API client is initialized")
     public void initializeAuthClient() {
@@ -37,6 +42,6 @@ public class AuthSteps {
 
         assertNotNull(token, "Authentication token should not be null");
 
-        TokenManager.setToken(token);
+        scenarioContext.setAuthToken(token);
     }
 }

@@ -81,4 +81,9 @@ public final class ApiConfig {
     public static String getPassword() {
         return PROPERTIES.getProperty("auth.password");
     }
+    public static int getRetryCount() {
+        return Integer.parseInt(
+                PROPERTIES.getProperty("retry.count", "1")
+        );
+    }
 }
