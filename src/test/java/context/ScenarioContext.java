@@ -35,4 +35,9 @@ public class ScenarioContext {
     public int getBookingId() {
         return bookingId;
     }
+    public void clear() {
+        authToken = null;
+        response = null;
+        bookingId = 0;
+    }
 }

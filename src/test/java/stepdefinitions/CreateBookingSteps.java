@@ -3,29 +3,33 @@ package stepdefinitions;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import com.booking.builders.BookingBuilder;
 import com.booking.models.Booking;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import context.ScenarioContext;
 import framework.clients.BookingClient;
-import assertions.ApiAssertions;
 
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 
-import java.util.List;
-
 public class CreateBookingSteps {
 
     private final BookingClient bookingClient = new BookingClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ScenarioContext scenarioContext;
 
     private Response response;
     private Object requestBody;
     private Booking booking;
+
+    public CreateBookingSteps(ScenarioContext scenarioContext) {
+        this.scenarioContext = scenarioContext;
+    }
 
     @When("I create a booking with valid details")
     public void createBookingWithValidDetails() {
@@ -33,7 +37,7 @@ public class CreateBookingSteps {
         booking = BookingBuilder.createValidBooking();
         requestBody = booking;
 
-        response = bookingClient.createBooking(requestBody);
+        sendBookingRequest();
     }
 
     @When("I create a booking with firstname length {int}, lastname length {int} and phone length {int}")
@@ -46,7 +50,8 @@ public class CreateBookingSteps {
         booking.setPhone("1".repeat(phoneLength));
 
         requestBody = booking;
-        response = bookingClient.createBooking(requestBody);
+
+        sendBookingRequest();
     }
 
     @When("I create a booking with firstname length {int} and lastname length {int}")
@@ -56,7 +61,7 @@ public class CreateBookingSteps {
         requestBody = BookingBuilder.createBookingWithNameLengths(
                 firstnameLength, lastnameLength);
 
-        response = bookingClient.createBooking(requestBody);
+        sendBookingRequest();
     }
 
     @When("I create a booking with phone length {int}")
@@ -64,7 +69,7 @@ public class CreateBookingSteps {
 
         requestBody = BookingBuilder.createBookingWithPhoneLength(phoneLength);
 
-        response = bookingClient.createBooking(requestBody);
+        sendBookingRequest();
     }
 
     @When("I create a booking with email {string}")
@@ -72,7 +77,7 @@ public class CreateBookingSteps {
 
         requestBody = BookingBuilder.createBookingWithEmail(email);
 
-        response = bookingClient.createBooking(requestBody);
+        sendBookingRequest();
     }
 
     @When("I create a booking with checkout date before checkin date")
@@ -81,13 +86,15 @@ public class CreateBookingSteps {
         ObjectNode bookingJson = objectMapper.valueToTree(
                 BookingBuilder.createValidBooking());
 
-        ObjectNode bookingDates = (ObjectNode) bookingJson.get("bookingdates");
+        ObjectNode bookingDates =
+                (ObjectNode) bookingJson.get("bookingdates");
 
         bookingDates.put("checkin", "2026-12-10");
         bookingDates.put("checkout", "2026-12-05");
 
         requestBody = bookingJson;
-        response = bookingClient.createBooking(requestBody);
+
+        sendBookingRequest();
     }
 
     @When("I create a booking without the {word} field")
@@ -99,15 +106,29 @@ public class CreateBookingSteps {
         bookingJson.remove(fieldName);
 
         requestBody = bookingJson;
-        response = bookingClient.createBooking(requestBody);
-    }
-/*
-    @Then("the booking response should match the JSON schema")
-    public void verifyBookingResponseSchema() {
 
-        ApiAssertions.assertBookingResponseSchema(response);
+        sendBookingRequest();
     }
-*/
+
+    @When("I create a booking with depositpaid value {string}")
+    public void createBookingWithInvalidDepositPaid(String value) {
+
+        ObjectNode bookingJson = objectMapper.valueToTree(
+                BookingBuilder.createValidBooking());
+
+        bookingJson.put("depositpaid", value);
+
+        requestBody = bookingJson;
+
+        sendBookingRequest();
+    }
+
+    private void sendBookingRequest() {
+
+        response = bookingClient.createBooking(requestBody);
+        scenarioContext.setResponse(response);
+    }
+
     @Then("the booking ID should be generated")
     public void verifyBookingIdIsGenerated() {
 

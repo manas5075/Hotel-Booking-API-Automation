@@ -19,9 +19,7 @@ public class GetBookingSteps {
     private final BookingClient bookingClient = new BookingClient();
     private final ScenarioContext scenarioContext;
 
-    private Response response;
     private int bookingId;
-    private String token;
 
     public GetBookingSteps(ScenarioContext scenarioContext) {
         this.scenarioContext = scenarioContext;
@@ -32,7 +30,8 @@ public class GetBookingSteps {
 
         Booking booking = BookingBuilder.createValidBooking();
 
-        response = bookingClient.createBooking(booking);
+        Response response = bookingClient.createBooking(booking);
+        scenarioContext.setResponse(response);
 
         assertEquals(200, response.getStatusCode(),
                 "Booking creation failed");
@@ -50,7 +49,12 @@ public class GetBookingSteps {
 
         bookingId = scenarioContext.getBookingId();
 
-        response = bookingClient.getBooking(bookingId, token);
+        Response response = bookingClient.getBooking(
+                bookingId,
+                scenarioContext.getAuthToken()
+        );
+
+        scenarioContext.setResponse(response);
     }
 
     @When("I retrieve a booking with an unknown ID")
@@ -58,23 +62,30 @@ public class GetBookingSteps {
 
         bookingId = Integer.MAX_VALUE;
 
-        response = bookingClient.getBooking(bookingId, token);
+        Response response = bookingClient.getBooking(
+                bookingId,
+                scenarioContext.getAuthToken()
+        );
+
+        scenarioContext.setResponse(response);
     }
 
     @Given("no authentication token is available")
     public void noAuthenticationTokenAvailable() {
 
-        token = null;
+        scenarioContext.setAuthToken(null);
     }
 
     @Given("an invalid authentication token is available")
     public void invalidAuthenticationTokenAvailable() {
 
-        token = "invalid-token";
+        scenarioContext.setAuthToken("invalid-token");
     }
 
     @Then("the booking response should contain valid booking details")
     public void verifyBookingDetails() {
+
+        Response response = scenarioContext.getResponse();
 
         assertNotNull(response.getBody());
 
@@ -86,15 +97,10 @@ public class GetBookingSteps {
         assertNotNull(response.jsonPath().get("phone"));
     }
 
-    @Then("the API should return an appropriate error response")
-    public void verifyUnknownBookingError() {
-
-        assertTrue(response.getStatusCode() >= 400,
-                "Expected an error response for an unknown booking ID");
-    }
-
     @Then("the response should contain an authorization error")
     public void verifyAuthorizationError() {
+
+        Response response = scenarioContext.getResponse();
 
         assertEquals(401, response.getStatusCode());
 
