@@ -35,7 +35,7 @@ Feature: Create Booking API
       | 2               | 3              |
       | 19              | 3              |
       | 3               | 2              |
-      | 3               | 19              |
+      | 3               | 19             |
 
   @NegativeTest
   Scenario Outline: Reject booking with invalid phone length

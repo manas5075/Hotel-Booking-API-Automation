@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Delete booking success contract",
+  "description": "DELETE success is defined by the OpenAPI contract as HTTP 201 with no response body. This metadata file documents the expected status and absence of a JSON payload; it is not a body schema.",
+  "type": "object",
+  "properties": {
+    "expectedStatusCode": {
+      "const": 201
+    },
+    "responseBody": {
+      "const": "empty"
+    }
+  },
+  "required": [
+    "expectedStatusCode",
+    "responseBody"
+  ],
+  "additionalProperties": false
+}

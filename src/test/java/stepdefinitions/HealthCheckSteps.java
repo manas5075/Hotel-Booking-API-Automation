@@ -4,6 +4,7 @@ package stepdefinitions;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import assertions.ApiAssertions;
 import context.ScenarioContext;
 import framework.constants.ApiConstants;
 import framework.config.ApiConfig;
@@ -51,6 +52,11 @@ public class HealthCheckSteps {
 
         assertEquals(expectedStatus, actualStatus,
                 "Unexpected health status");
+
+        ApiAssertions.assertResponseSchema(
+                response,
+                "schemas/response/healthcheck-response-schema.json"
+        );
     }
 
     @Then("the health response should contain the {string} field")
@@ -60,5 +66,10 @@ public class HealthCheckSteps {
 
         assertNotNull(response.jsonPath().get(fieldName),
                 "Expected response field is missing: " + fieldName);
+
+        ApiAssertions.assertResponseSchema(
+                response,
+                "schemas/response/healthcheck-response-schema.json"
+        );
     }
 }

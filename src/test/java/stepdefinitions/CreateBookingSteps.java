@@ -185,6 +185,11 @@ public class CreateBookingSteps {
         assertEquals(400, response.getStatusCode(),
                 "Expected HTTP 400 for invalid booking data");
 
+        ApiAssertions.assertResponseSchema(
+                response,
+                "schemas/response/create-booking-validation-error-response-schema.json"
+        );
+
         List<String> errors = response.jsonPath().getList("errors");
 
         assertNotNull(errors, "Expected validation errors in response");
