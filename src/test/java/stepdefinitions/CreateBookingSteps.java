@@ -51,7 +51,7 @@ public class CreateBookingSteps {
     @When("I create a booking using test data {string}")
     public void createBookingUsingTestData(String fileName) {
 
-        String resourcePath = "testdata/create-booking/" + fileName;
+        String resourcePath = "testdata/booking/" + fileName;
 
         try (InputStream inputStream =
                 getClass().getClassLoader()
