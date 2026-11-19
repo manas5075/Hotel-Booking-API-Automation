@@ -1,4 +1,3 @@
-
 package framework.clients;
 
 import io.restassured.response.Response;
@@ -10,6 +9,9 @@ import framework.specification.RequestSpecFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class AuthClient {
 
     private static final Logger logger =
@@ -17,14 +19,30 @@ public class AuthClient {
 
     private static final String LOGIN_ENDPOINT = "/auth/login";
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     // Authenticate user and retrieve token
     public Response login(String username, String password) {
+
+        String requestBody = createLoginRequest(username, password);
+
+        return sendLoginRequest(requestBody);
+    }
+
+    // Send a login request using a raw JSON body
+    public Response loginWithRawJson(String requestBody) {
+
+        return sendLoginRequest(requestBody);
+    }
+
+    // Common method for sending authentication requests
+    private Response sendLoginRequest(String requestBody) {
 
         logger.info("Sending authentication request to {}", LOGIN_ENDPOINT);
 
         Response response = given()
                 .spec(RequestSpecFactory.getRequestSpecification())
-                .body(createLoginRequest(username, password))
+                .body(requestBody)
                 .when()
                 .post(LOGIN_ENDPOINT);
 
@@ -42,10 +60,20 @@ public class AuthClient {
     }
 
     // Create login request body
-    private LoginRequest createLoginRequest(
+    private String createLoginRequest(
             String username, String password) {
 
-        return new LoginRequest(username, password);
+        try {
+            return objectMapper.writeValueAsString(
+                    new LoginRequest(username, password)
+            );
+
+        } catch (JsonProcessingException exception) {
+            throw new IllegalStateException(
+                    "Could not serialize authentication request",
+                    exception
+            );
+        }
     }
 
     // Login request model
