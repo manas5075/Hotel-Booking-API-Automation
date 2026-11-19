@@ -1,8 +1,10 @@
-
 package stepdefinitions;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.InputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import com.booking.builders.BookingBuilder;
@@ -44,6 +46,33 @@ public class CreateBookingSteps {
         );
 
         sendBookingRequest();
+    }
+
+    @When("I create a booking using test data {string}")
+    public void createBookingUsingTestData(String fileName) {
+
+        String resourcePath = "testdata/create-booking/" + fileName;
+
+        try (InputStream inputStream =
+                getClass().getClassLoader()
+                        .getResourceAsStream(resourcePath)) {
+
+            assertNotNull(inputStream,
+                    "Test-data file not found: " + resourcePath);
+
+            requestBody = new String(
+                    inputStream.readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+
+            sendBookingRequest();
+
+        } catch (IOException exception) {
+            throw new AssertionError(
+                    "Could not read test-data file: " + resourcePath,
+                    exception
+            );
+        }
     }
 
     @When("I create a booking with firstname length {int}, lastname length {int} and phone length {int}")

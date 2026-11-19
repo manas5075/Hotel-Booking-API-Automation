@@ -1,7 +1,7 @@
+
 @BookingAPI
 @GetBooking
 Feature: Get Booking API
-
   Background:
     Given the booking API client is initialized
 
@@ -31,3 +31,13 @@ Feature: Get Booking API
     When I retrieve the booking by its ID
     Then the API response status code should be 401
     And the response should contain an authorization error
+
+  @NegativeTest
+  Scenario Outline: Retrieve a booking with a boundary ID
+    Given I am authenticated
+    When I retrieve a booking using ID <bookingId>
+    Then the API should return an appropriate error response
+    Examples:
+      | bookingId |
+      | 0         |
+      | -1        |

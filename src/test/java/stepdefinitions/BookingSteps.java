@@ -64,4 +64,16 @@ public class BookingSteps {
             "Error response body should not be null"
         );
     }
+ 
+    @When("I retrieve a booking using ID {int}")
+    public void retrieveBookingUsingId(int id) {
+
+        Response response = bookingClient.getBooking(
+                id,
+                scenarioContext.getAuthToken()
+        );
+
+        scenarioContext.setResponse(response);
+    }
+ 
 }
