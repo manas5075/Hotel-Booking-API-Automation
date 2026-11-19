@@ -1,4 +1,3 @@
-
 @BookingAPI
 @GetBooking
 Feature: Get Booking API
@@ -8,7 +7,8 @@ Feature: Get Booking API
 
   @PositiveTest
   Scenario: Retrieve an existing booking
-    Given a booking has been created successfully
+    Given I am authenticated
+    And a booking has been created successfully
     When I retrieve the booking by its ID
     Then the API response status code should be 200
     And the booking response should contain valid booking details

@@ -1,4 +1,3 @@
-
 @BookingAPI
 @DeleteBooking
 Feature: Delete Booking API
@@ -9,12 +8,14 @@ Feature: Delete Booking API
   @PositiveTest
   Scenario: Delete an existing booking
     Given a booking has been created successfully
+    And I am authenticated
     When I delete the booking
     Then the API response status code should be 201
 
   @PositiveTest
   Scenario: Verify a booking cannot be retrieved after deletion
     Given a booking has been created successfully
+    And I am authenticated
     When I delete the booking
     Then the API response status code should be 201
     When I retrieve the deleted booking
