@@ -1,6 +1,9 @@
 
 package stepdefinitions;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import context.ScenarioContext;
 import framework.clients.BookingClient;
 
@@ -25,6 +28,12 @@ public class DeleteBookingSteps {
         Response response = bookingClient.deleteBooking(bookingId, token);
 
         scenarioContext.setResponse(response);
+
+        assertEquals(201, response.getStatusCode(),
+                "Expected HTTP 201 after successful booking deletion");
+
+        assertTrue(response.asString().isEmpty(),
+                "Expected an empty response body after booking deletion");
     }
 
     @When("I retrieve the deleted booking")

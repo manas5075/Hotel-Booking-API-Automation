@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.booking.builders.BookingBuilder;
 import com.booking.models.Booking;
 
+import assertions.ApiAssertions;
 import context.ScenarioContext;
 import framework.clients.BookingClient;
 
@@ -33,8 +34,12 @@ public class GetBookingSteps {
         Response response = bookingClient.createBooking(booking);
         scenarioContext.setResponse(response);
 
-        assertEquals(200, response.getStatusCode(),
-                "Booking creation failed");
+        ApiAssertions.assertStatusCode(response, 200);
+
+        ApiAssertions.assertResponseSchema(
+                response,
+                "schemas/response/create-booking-success-response-schema.json"
+        );
 
         bookingId = response.jsonPath().getInt("bookingid");
 
@@ -87,6 +92,11 @@ public class GetBookingSteps {
 
         Response response = scenarioContext.getResponse();
 
+        ApiAssertions.assertResponseSchema(
+                response,
+                "schemas/response/booking-response-schema.json"
+        );
+
         assertNotNull(response.getBody());
 
         assertNotNull(response.jsonPath().get("roomid"));
@@ -102,7 +112,12 @@ public class GetBookingSteps {
 
         Response response = scenarioContext.getResponse();
 
-        assertEquals(401, response.getStatusCode());
+        ApiAssertions.assertStatusCode(response, 401);
+
+        ApiAssertions.assertResponseSchema(
+                response,
+                "schemas/response/unauthorized-response-schema.json"
+        );
 
         String error = response.jsonPath().getString("error");
 

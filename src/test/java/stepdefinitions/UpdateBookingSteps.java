@@ -3,19 +3,20 @@ package stepdefinitions;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import com.booking.builders.BookingBuilder;
 import com.booking.models.Booking;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import assertions.ApiAssertions;
 import context.ScenarioContext;
 import framework.clients.BookingClient;
 
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
-
-import java.util.List;
 
 public class UpdateBookingSteps {
 
@@ -35,6 +36,11 @@ public class UpdateBookingSteps {
 
         expectedBooking = BookingBuilder.createValidBooking();
         requestBody = expectedBooking;
+
+        ApiAssertions.assertRequestSchema(
+                requestBody,
+                "schemas/request/update-booking-request-schema.json"
+        );
 
         sendUpdateRequest();
     }
@@ -67,9 +73,7 @@ public class UpdateBookingSteps {
     @When("I update the booking with phone length {int}")
     public void updateBookingWithInvalidPhoneLength(int phoneLength) {
 
-        expectedBooking = BookingBuilder.createBookingWithPhoneLength(
-                phoneLength);
-
+        expectedBooking = BookingBuilder.createBookingWithPhoneLength(phoneLength);
         requestBody = expectedBooking;
 
         sendUpdateRequest();
@@ -119,6 +123,11 @@ public class UpdateBookingSteps {
 
         assertNotNull(expectedBooking);
 
+        ApiAssertions.assertResponseSchema(
+                response,
+                "schemas/response/booking-response-schema.json"
+        );
+
         assertEquals(
                 expectedBooking.getFirstname(),
                 response.jsonPath().getString("firstname"));
@@ -145,8 +154,12 @@ public class UpdateBookingSteps {
 
         Response response = scenarioContext.getResponse();
 
-        assertEquals(400, response.getStatusCode(),
-                "Expected HTTP 400 for invalid booking update");
+        ApiAssertions.assertStatusCode(response, 400);
+
+        ApiAssertions.assertResponseSchema(
+                response,
+                "schemas/response/create-booking-validation-error-response-schema.json"
+        );
 
         List<String> errors = response.jsonPath().getList("errors");
 

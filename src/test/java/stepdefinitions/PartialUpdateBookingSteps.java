@@ -12,6 +12,7 @@ import com.booking.models.Booking;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import assertions.ApiAssertions;
 import context.ScenarioContext;
 import framework.clients.BookingClient;
 
@@ -38,7 +39,7 @@ public class PartialUpdateBookingSteps {
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("firstname", firstname);
 
-        sendPartialUpdateRequest(requestBody);
+        sendValidPartialUpdateRequest(requestBody);
     }
 
     @When("I partially update the booking with lastname {string}")
@@ -47,7 +48,7 @@ public class PartialUpdateBookingSteps {
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("lastname", lastname);
 
-        sendPartialUpdateRequest(requestBody);
+        sendValidPartialUpdateRequest(requestBody);
     }
 
     @When("I partially update the booking depositpaid to {word}")
@@ -56,7 +57,7 @@ public class PartialUpdateBookingSteps {
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("depositpaid", depositpaid);
 
-        sendPartialUpdateRequest(requestBody);
+        sendValidPartialUpdateRequest(requestBody);
     }
 
     @When("I partially update the booking with firstname {string}, lastname {string} and depositpaid {word}")
@@ -68,7 +69,7 @@ public class PartialUpdateBookingSteps {
         requestBody.put("lastname", lastname);
         requestBody.put("depositpaid", depositpaid);
 
-        sendPartialUpdateRequest(requestBody);
+        sendValidPartialUpdateRequest(requestBody);
     }
 
     @When("I partially update the booking with invalid depositpaid value {string}")
@@ -76,6 +77,16 @@ public class PartialUpdateBookingSteps {
 
         ObjectNode requestBody = objectMapper.createObjectNode();
         requestBody.put("depositpaid", value);
+
+        sendPartialUpdateRequest(requestBody);
+    }
+
+    private void sendValidPartialUpdateRequest(Object requestBody) {
+
+        ApiAssertions.assertRequestSchema(
+                requestBody,
+                "schemas/request/partial-update-booking-request-schema.json"
+        );
 
         sendPartialUpdateRequest(requestBody);
     }
@@ -96,6 +107,11 @@ public class PartialUpdateBookingSteps {
 
         Response response = scenarioContext.getResponse();
 
+        ApiAssertions.assertResponseSchema(
+                response,
+                "schemas/response/booking-response-schema.json"
+        );
+
         assertEquals(
                 expectedFirstname,
                 response.jsonPath().getString("firstname"));
@@ -106,6 +122,11 @@ public class PartialUpdateBookingSteps {
 
         Response response = scenarioContext.getResponse();
 
+        ApiAssertions.assertResponseSchema(
+                response,
+                "schemas/response/booking-response-schema.json"
+        );
+
         assertEquals(
                 expectedLastname,
                 response.jsonPath().getString("lastname"));
@@ -115,6 +136,11 @@ public class PartialUpdateBookingSteps {
     public void verifyBookingDepositPaid(boolean expectedDepositPaid) {
 
         Response response = scenarioContext.getResponse();
+
+        ApiAssertions.assertResponseSchema(
+                response,
+                "schemas/response/booking-response-schema.json"
+        );
 
         assertEquals(
                 expectedDepositPaid,
@@ -152,8 +178,12 @@ public class PartialUpdateBookingSteps {
 
         Response response = scenarioContext.getResponse();
 
-        assertEquals(400, response.getStatusCode(),
-                "Expected HTTP 400 for invalid partial update");
+        ApiAssertions.assertStatusCode(response, 400);
+
+        ApiAssertions.assertResponseSchema(
+                response,
+                "schemas/response/create-booking-validation-error-response-schema.json"
+        );
 
         List<String> errors = response.jsonPath().getList("errors");
 
