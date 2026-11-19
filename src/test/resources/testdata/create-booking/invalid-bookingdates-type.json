@@ -1,0 +1,9 @@
+{
+  "roomid": 1,
+  "firstname": "John",
+  "lastname": "Doe",
+  "depositpaid": true,
+  "bookingdates": "invalid",
+  "email": "john.doe@example.com",
+  "phone": "12345678901"
+}
