@@ -24,7 +24,7 @@ public final class RetryUtils {
     }
 
     // Package-private overload for unit testing
-    static Response executeWithRetry(
+    public static Response executeWithRetry(
             Supplier<Response> request, int maxRetries) {
 
         if (maxRetries < 0) {

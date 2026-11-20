@@ -1,8 +1,10 @@
 
-package framework.utils;
+package tests;
 
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
+
+import framework.utils.RetryUtils;
 
 import java.lang.reflect.Proxy;
 import java.util.concurrent.atomic.AtomicInteger;

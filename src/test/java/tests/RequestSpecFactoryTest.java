@@ -1,6 +1,8 @@
-package framework.specification;
+package tests;
 
 import org.junit.jupiter.api.Test;
+
+import framework.specification.RequestSpecFactory;
 import io.restassured.specification.RequestSpecification;
 import static org.junit.jupiter.api.Assertions.*;
 
