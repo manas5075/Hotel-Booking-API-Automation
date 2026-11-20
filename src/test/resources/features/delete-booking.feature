@@ -39,3 +39,13 @@ Feature: Delete Booking API
   Scenario: Delete a booking with an unknown ID
     When I delete a booking with an unknown ID
     Then the API should return an appropriate error response
+
+  @NegativeTest
+  Scenario: Reject deletion with booking ID zero
+    When I delete a booking with ID 0
+    Then the API should return an appropriate error response
+
+  @NegativeTest
+  Scenario: Reject deletion with a negative booking ID
+    When I delete a booking with ID -1
+    Then the API should return an appropriate error response

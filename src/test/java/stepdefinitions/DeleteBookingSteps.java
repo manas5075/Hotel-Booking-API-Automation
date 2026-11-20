@@ -1,4 +1,3 @@
-
 package stepdefinitions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -55,6 +54,17 @@ public class DeleteBookingSteps {
 
         Response response = bookingClient.deleteBooking(
                 unknownBookingId, token);
+
+        scenarioContext.setResponse(response);
+    }
+
+    @When("I delete a booking with ID {int}")
+    public void deleteBookingWithSpecificId(int bookingId) {
+
+        String token = scenarioContext.getAuthToken();
+
+        Response response = bookingClient.deleteBooking(
+                bookingId, token);
 
         scenarioContext.setResponse(response);
     }
