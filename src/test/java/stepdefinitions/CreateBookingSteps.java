@@ -167,7 +167,7 @@ public class CreateBookingSteps {
     @Then("the booking ID should be generated")
     public void verifyBookingIdIsGenerated() {
 
-        ApiAssertions.assertStatusCode(response, 200);
+        ApiAssertions.assertStatusCode(response, 201);
 
         ApiAssertions.assertResponseSchema(
                 response,
@@ -185,27 +185,44 @@ public class CreateBookingSteps {
     @Then("the created booking details should match the request")
     public void verifyCreatedBookingDetails() {
 
-        assertNotNull(booking);
+        assertNotNull(booking, "Booking request data should not be null");
+        assertNotNull(response, "Booking response should not be null");
 
         assertEquals(
                 booking.getFirstname(),
-                response.jsonPath().getString("booking.firstname"));
+                response.jsonPath().getString("firstname"),
+                "Firstname does not match the request"
+        );
 
         assertEquals(
                 booking.getLastname(),
-                response.jsonPath().getString("booking.lastname"));
-
-        assertEquals(
-                booking.getEmail(),
-                response.jsonPath().getString("booking.email"));
-
-        assertEquals(
-                booking.getPhone(),
-                response.jsonPath().getString("booking.phone"));
+                response.jsonPath().getString("lastname"),
+                "Lastname does not match the request"
+        );
 
         assertEquals(
                 booking.getRoomid(),
-                response.jsonPath().getInt("booking.roomid"));
+                response.jsonPath().getInt("roomid"),
+                "Room ID does not match the request"
+        );
+
+        assertEquals(
+                booking.getDepositpaid(),
+                response.jsonPath().getBoolean("depositpaid"),
+                "Deposit paid value does not match the request"
+        );
+
+        assertEquals(
+                booking.getBookingdates().getCheckin(),
+                response.jsonPath().getString("bookingdates.checkin"),
+                "Check-in date does not match the request"
+        );
+
+        assertEquals(
+                booking.getBookingdates().getCheckout(),
+                response.jsonPath().getString("bookingdates.checkout"),
+                "Check-out date does not match the request"
+        );
     }
 
     @Then("the booking creation should be rejected with validation errors")

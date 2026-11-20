@@ -1,3 +1,4 @@
+
 package tests;
 
 import org.junit.jupiter.api.Test;
@@ -10,14 +11,28 @@ import static org.junit.jupiter.api.Assertions.*;
 class BookingBuilderTest {
 
     @Test
-    void shouldLoadValidBookingTestData() {
+    void shouldCreateValidBookingWithDynamicData() {
 
         Booking booking = BookingBuilder.createValidBooking();
 
         assertNotNull(booking);
-        assertEquals("Manas", booking.getFirstname());
-        assertEquals("Behera", booking.getLastname());
+
+        assertNotNull(booking.getFirstname());
+        assertTrue(booking.getFirstname().startsWith("Test"));
+
+        assertNotNull(booking.getLastname());
+        assertTrue(booking.getLastname().startsWith("User"));
+
         assertEquals(2, booking.getRoomid());
         assertTrue(booking.getDepositpaid());
+
+        assertNotNull(booking.getEmail());
+        assertTrue(booking.getEmail().endsWith("@example.com"));
+
+        assertEquals(11, booking.getPhone().length());
+
+        assertNotNull(booking.getBookingdates());
+        assertNotNull(booking.getBookingdates().getCheckin());
+        assertNotNull(booking.getBookingdates().getCheckout());
     }
 }

@@ -20,6 +20,8 @@ public class BookingClient {
                 .when()
                 .post(BOOKING_ENDPOINT);
     }
+    
+	
 
     // Get a booking by ID with retry support
     public Response getBooking(int bookingId, String token) {

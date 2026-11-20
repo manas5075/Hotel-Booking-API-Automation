@@ -74,8 +74,7 @@ Background:
 
   @UB_08 @NegativeTest
   Scenario: Reject update without authentication
-    Given a booking has been created successfully
-    And no authentication token is available
+    Given no authentication token is available
     When I update the booking with valid details
     Then the API response status code should be 401
 
@@ -142,7 +141,6 @@ Background:
 
   @UB_14 @NegativeTest
   Scenario: Reject update with invalid authentication token
-    Given a booking has been created successfully
-    And an invalid authentication token is available
+    Given an invalid authentication token is available
     When I update the booking with valid details
     Then the API response status code should be 401

@@ -1,36 +1,48 @@
 
 package builders;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.time.LocalDate;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import framework.models.Booking;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import framework.models.Bookingdates;
 
 public final class BookingBuilder {
-
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private BookingBuilder() {
         // Prevent object creation
     }
 
     public static Booking createValidBooking() {
-        try (InputStream inputStream =
-                     BookingBuilder.class.getClassLoader()
-                             .getResourceAsStream("testdata/booking/booking.json")) {
 
-            if (inputStream == null) {
-                throw new IllegalStateException(
-                        "booking.json file not found in testdata folder");
-            }
+        Booking booking = new Booking();
 
-            return OBJECT_MAPPER.readValue(inputStream, Booking.class);
+        String uniqueId = UUID.randomUUID()
+                .toString()
+                .replace("-", "")
+                .substring(0, 8);
 
-        } catch (IOException e) {
-            throw new IllegalStateException(
-                    "Unable to read booking test data", e);
-        }
+        booking.setRoomid(2);
+        booking.setFirstname("Test" + uniqueId);
+        booking.setLastname("User" + uniqueId);
+        booking.setDepositpaid(true);
+        booking.setEmail("test" + uniqueId + "@example.com");
+        booking.setPhone("12345678901");
+
+        // Generate random check-in date between 1 and 30 days from today
+        int randomDays = ThreadLocalRandom.current().nextInt(1, 31);
+
+        LocalDate checkinDate = LocalDate.now().plusDays(randomDays);
+        LocalDate checkoutDate = checkinDate.plusDays(3);
+
+        Bookingdates bookingdates = new Bookingdates();
+        bookingdates.setCheckin(checkinDate.toString());
+        bookingdates.setCheckout(checkoutDate.toString());
+
+        booking.setBookingdates(bookingdates);
+
+        return booking;
     }
 
     public static Booking createBookingWithNameLengths(

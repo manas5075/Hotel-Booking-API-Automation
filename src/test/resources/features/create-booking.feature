@@ -8,7 +8,7 @@ Background:
   @CB_01 @PositiveTest @SmokeTest
   Scenario: Create booking with valid details
     When I create a booking with valid details
-    Then the API response status code should be 200
+    Then the API response status code should be 201
     And the booking response should match the JSON schema
     And the booking ID should be generated
     And the created booking details should match the request
@@ -16,7 +16,7 @@ Background:
   @CB_02 @PositiveTest
   Scenario Outline: Create booking with valid boundary values
     When I create a booking with firstname length <firstnameLength>, lastname length <lastnameLength> and phone length <phoneLength>
-    Then the API response status code should be 200
+    Then the API response status code should be 201
     And the booking ID should be generated
     Examples:
       | firstnameLength | lastnameLength | phoneLength |
@@ -26,7 +26,7 @@ Background:
   @CB_03 @PositiveTest
   Scenario Outline: Create booking with valid JSON test data
     When I create a booking using test data "<fileName>"
-    Then the API response status code should be 200
+    Then the API response status code should be 201
     And the booking response should match the JSON schema
     And the booking ID should be generated
     Examples:

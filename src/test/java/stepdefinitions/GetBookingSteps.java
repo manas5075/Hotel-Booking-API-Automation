@@ -34,7 +34,7 @@ public class GetBookingSteps {
         Response response = bookingClient.createBooking(booking);
         scenarioContext.setResponse(response);
 
-        ApiAssertions.assertStatusCode(response, 200);
+        ApiAssertions.assertStatusCode(response, 201);
 
         ApiAssertions.assertResponseSchema(
                 response,

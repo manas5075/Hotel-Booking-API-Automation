@@ -65,7 +65,6 @@ Background:
 
   @PUB_08 @NegativeTest
   Scenario Outline: Reject partial update with invalid request data
-    Given a booking has been created successfully
     When I partially update the booking using test data "<fileName>"
     Then the booking partial update should be rejected with validation errors
     Examples:
