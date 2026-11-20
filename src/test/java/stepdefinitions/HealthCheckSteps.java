@@ -1,4 +1,3 @@
-
 package stepdefinitions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -48,6 +47,8 @@ public class HealthCheckSteps {
 
         Response response = scenarioContext.getResponse();
 
+        ApiAssertions.assertStatusCode(response, 200);
+
         String actualStatus = response.jsonPath().getString("status");
 
         assertEquals(expectedStatus, actualStatus,
@@ -63,6 +64,8 @@ public class HealthCheckSteps {
     public void verifyHealthResponseContainsField(String fieldName) {
 
         Response response = scenarioContext.getResponse();
+
+        ApiAssertions.assertStatusCode(response, 200);
 
         assertNotNull(response.jsonPath().get(fieldName),
                 "Expected response field is missing: " + fieldName);
