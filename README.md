@@ -1,8 +1,8 @@
 # Hotel Booking API Automation
 
-A Java-based API automation framework for testing the Restful Booker API using REST Assured, Cucumber, and JUnit 5.
+A Java 17-based API automation framework for testing the Restful Booker API using REST Assured, Cucumber, and JUnit 5.
 
-The framework supports data-driven testing, JSON Schema validation, reusable authentication, request and response assertions, logging, and test reporting.
+The framework supports data-driven testing, JSON Schema validation, reusable authentication, request and response assertions, logging, and Cucumber and ExtentReports test reporting.
 
 ## Project Overview
 
@@ -18,6 +18,9 @@ The project automates positive and negative test scenarios for the following API
 | Delete Booking | DELETE | `/booking/{id}` |
 | Health Check | GET | `/booking/actuator/health` |
 
+**API Base URL:**  
+https://automationintesting.online/api
+
 ## Technology Stack
 
 - **Java 17** – Programming language
@@ -28,6 +31,7 @@ The project automates positive and negative test scenarios for the following API
 - **Jackson** – JSON serialization and deserialization
 - **JSON Schema Validator** – Request and response schema validation
 - **Log4j2** – Logging
+- **ExtentReports** – HTML test execution reporting
 
 ## Framework Features
 
@@ -39,9 +43,11 @@ The project automates positive and negative test scenarios for the following API
 - Data-driven testing using external JSON files.
 - JSON Schema validation for applicable API requests and responses.
 - Reusable API response assertions.
-- Retry mechanism for selected transient failures on GET requests.
-- Scenario-level context management to support parallel execution.
-- Timestamped execution logs and Cucumber reports.
+- Retry mechanism for selected transient failures.
+- Scenario-level context management.
+- Cucumber execution reporting and logging.
+- ExtentReports integration for detailed HTML execution reports.
+- Timestamped ExtentReports output to preserve reports from different executions.
 
 ## Project Structure
 
@@ -51,35 +57,38 @@ API_Testing_Kata/
 ├── src/
 │   ├── main/
 │   │   └── java/
-│   │       ├── assertions/
-│   │       ├── framework/
-│   │       │   ├── clients/
-│   │       │   ├── config/
-│   │       │   ├── constants/
-│   │       │   ├── specification/
-│   │       │   └── utils/
-│   │       └── com/
-│   │           └── booking/
-│   │               ├── builders/
-│   │               └── models/
+│   │       └── framework/
+│   │           ├── clients/
+│   │           ├── config/
+│   │           ├── constants/
+│   │           ├── models/
+│   │           ├── specification/
+│   │           └── utils/
 │   │
 │   └── test/
 │       ├── java/
+│       │   ├── assertions/
+│       │   ├── builders/
 │       │   ├── context/
 │       │   ├── hooks/
 │       │   ├── runners/
-│       │   └── stepdefinitions/
+│       │   ├── stepdefinitions/
+│       │   └── tests/
 │       │
 │       └── resources/
+│           ├── config/
 │           ├── features/
+│           ├── logging/
 │           ├── schemas/
 │           │   ├── request/
 │           │   ├── response/
 │           │   └── contracts/
+│           ├── spec/
 │           ├── testdata/
+│           │   ├── authentication/
 │           │   ├── booking/
 │           │   └── partial-update/
-│           ├── logging/
+│           ├── extent.properties
 │           └── junit-platform.properties
 │
 ├── pom.xml
@@ -102,7 +111,7 @@ API_Testing_Kata/
 ### 2. Create Booking API
 
 - Successful booking creation.
-- Minimum and maximum valid field lengths.
+- Minimum and maximum field lengths.
 - Invalid name and phone lengths.
 - Invalid email formats.
 - Invalid booking dates.
@@ -121,12 +130,12 @@ API_Testing_Kata/
 ### 4. Update Booking API (PUT)
 
 - Update an existing booking.
-- Minimum and maximum valid field lengths.
+- Minimum and maximum field lengths.
 - Invalid name and phone lengths.
 - Invalid email formats.
 - Invalid booking dates.
 - Authentication validation.
-- Additional JSON-driven negative test cases.
+- JSON-driven negative test cases.
 
 ### 5. Partial Update Booking API (PATCH)
 
@@ -155,6 +164,8 @@ API_Testing_Kata/
 - Verify the response contains the expected status field.
 - Health response schema validation.
 
+*The scenarios above describe implemented test coverage, not confirmation that every endpoint currently passes against the live API.*
+
 ## JSON Schema Validation
 
 JSON schemas are maintained under:
@@ -169,7 +180,7 @@ src/test/resources/schemas/
 
 The framework uses JSON Schema Draft-07 for schema validation.
 
-The schemas were created using the supplied OpenAPI YAML specification as the reference for request and response structures.
+The schemas were designed using the supplied OpenAPI YAML specification as the reference for request and response structures.
 
 ## Test Data Management
 
@@ -181,6 +192,7 @@ src/test/resources/testdata/
 
 The test data is organised into:
 
+- `authentication/` – Authentication test payloads.
 - `booking/` – Create Booking and Update Booking test data.
 - `partial-update/` – Partial Update Booking test data.
 
@@ -190,83 +202,145 @@ This approach separates test data from Gherkin scenarios and Java step definitio
 
 The framework uses centralized configuration through `ApiConfig` and request specifications through `RequestSpecFactory`.
 
-Configure the API base URL and credentials using the project's existing configuration files or supported environment settings.
+Configuration files are maintained under:
 
-Do not commit real credentials, authentication tokens, or other secrets to the repository.
+```text
+src/test/resources/config/
+```
 
-## API Environment and Current Testing Status
+- `config-qa.properties`
+- `config-mock.properties`
 
-The project targets the Restful Booker API.
+The QA configuration is intended for the target API environment. Do not commit real credentials, authentication tokens, or other secrets to the repository.
 
-**API base URL:**
+## Current API Testing Status
 
-https://automationintesting.online/api
+The framework is currently under development and live API verification is not yet complete.
 
-**Endpoint availability:** During framework development, the API endpoints were inactive or unavailable for reliable live testing.
+| API | Current Status | Observation |
+|---|---|---|
+| Authentication | Working | Successful authentication and applicable negative scenarios are working. |
+| Create Booking | Partially working | Some booking creation functionality works. Unique test-data generation and repeatability require further observation. Response schema verification also has a known mismatch. |
+| Get Booking | Not working currently | Live API execution is not producing reliable expected results. |
+| Update Booking | Not working currently | Requires further investigation against the live API. |
+| Partial Update Booking | Not working currently | Requires further investigation against the live API. |
+| Delete Booking | Not working currently | Requires further investigation against the live API. |
+| Health Check | Not working currently | Expected health-check response is not being received reliably. |
 
-To continue framework development despite this limitation, the supplied OpenAPI YAML specification was used as the primary reference for:
+### Create Booking – Further Observation Required
 
-- Identifying API endpoints and HTTP methods.
-- Understanding request parameters and response structures.
-- Designing request and response JSON schemas.
-- Creating positive and negative test scenarios.
-- Identifying mandatory fields and supported data types.
-- Defining contract-based response expectations.
+Some Create Booking scenarios are working, but repeatable execution needs further stabilisation.
 
-### Schema Development and Local Validation
+The framework generates dynamic booking data, including unique names and email addresses. However, booking conflicts and environment-dependent behaviour have been observed.
 
-JSON Schema files were generated based on the OpenAPI YAML specification.
+Further investigation is required to ensure that generated booking data is sufficiently unique and that repeated executions do not produce unexpected conflicts.
 
-The schemas were validated locally using the project's `SchemaValidationTest`.
+### Create Booking – Response Schema Verification Issue
 
-The schema validation execution completed successfully:
+An additional issue was identified during Create Booking response validation.
 
-- 2 tests executed.
-- 0 failures.
-- 0 errors.
-- Build successful.
+The supplied OpenAPI specification and the corresponding JSON response schema expect the booking response to contain `email` and `phone` fields. However, the actual Create Booking API response does not include these two fields.
 
-This confirms that the schema documents are valid and that the intentionally invalid schema definition is rejected.
+As a result:
 
-### Important Testing Limitation
+- The booking creation request can succeed and return HTTP `201 Created`.
+- The response contains the generated booking ID and other booking details.
+- Response schema validation fails because the required `email` and `phone` properties are missing.
+- This indicates a mismatch between the documented API contract and the actual API response.
 
-Successful local schema validation and Java compilation do not confirm that the live API behaves as expected.
+**Current observation:** Booking creation and response schema verification are separate outcomes. A successful HTTP response does not necessarily mean that response schema validation has passed.
 
-Full end-to-end API execution, including actual response status codes, authentication behaviour, booking creation, updates, and deletion, remains subject to endpoint availability.
+Further investigation is required to confirm whether the OpenAPI specification or the live API response needs to be corrected. The existing contract expectations should be retained until the discrepancy is clarified.
 
-Some additional negative and boundary scenarios are robustness tests whose expected behaviour is not explicitly defined in the supplied OpenAPI specification. These expectations must be confirmed against the live API when it becomes available.
+### API Availability and Contract Considerations
 
-The API environment may reset periodically, so existing booking data and availability can change between executions.
+The supplied OpenAPI YAML specification is used as the reference for:
+
+- API endpoints and HTTP methods.
+- Request parameters and payload structures.
+- Mandatory fields and supported data types.
+- Expected response structures and contract status codes.
+
+Differences have been observed between the supplied API specification and some actual live API responses. These differences should be investigated and documented rather than changing expected results simply to make tests pass.
+
+## Test Execution Results
+
+The following results were recorded during a full Cucumber test execution:
+
+| Result | Count |
+|---|---:|
+| Passed | 76 |
+| Failed | 43 |
+| Total scenario executions | 119 |
+
+These figures represent scenario executions, including individual examples from Scenario Outlines, rather than individual test steps.
+
+### Schema Validation Results
+
+The separate schema validation execution completed successfully:
+
+| Result | Count |
+|---|---:|
+| Tests executed | 2 |
+| Passed | 2 |
+| Failed | 0 |
+| Errors | 0 |
+
+**Build result:** Successful.
+
+The schema validation result confirms that the schema validation tests passed locally. It does not confirm that all live API endpoints are working.
+
+*Execution results are a snapshot from a particular test run. Results may vary depending on API availability, booking data, and environment state.*
 
 ## Running the Tests
 
-Run the following commands from the project root.
+Run all commands from the project root directory.
 
-**Compile the project and test sources:**
+### 1. Compile the project
 
 ```bash
 mvn test-compile
 ```
 
-**Run schema validation tests:**
+### 2. Run schema validation tests
 
 ```bash
 mvn -Dtest=SchemaValidationTest test
 ```
 
-**Run unit tests for the retry utility:**
+### 3. Run retry utility tests
 
 ```bash
 mvn -Dtest=RetryUtilsTest test
 ```
 
-**Run the complete test suite:**
+### 4. Run the complete Cucumber test suite
 
 ```bash
-mvn test -Dtest=TestRunner
+mvn clean test -Dtest=TestRunner
 ```
 
-**Run an individual feature:**
+### 5. Run the Smoke Test scenarios
+
+```bash
+mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@SmokeTest"
+```
+
+### 6. Run Create Booking scenarios
+
+```bash
+mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@CreateBooking"
+```
+
+### 7. Run a specific scenario by tag
+
+For example, to execute the UB_01 Update Booking scenario:
+
+```bash
+mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@UB_01"
+```
+
+### 8. Run an individual feature file
 
 ```bash
 mvn test -Dtest=TestRunner -Dcucumber.features=src/test/resources/features/create-booking.feature
@@ -274,25 +348,85 @@ mvn test -Dtest=TestRunner -Dcucumber.features=src/test/resources/features/creat
 
 Replace `create-booking.feature` with the feature file you want to execute.
 
-Note: Complete end-to-end API verification requires an available API environment.
-
 ## Logging and Reports
 
 The framework uses Log4j2 for execution logging.
 
-Cucumber execution reports are configured through the test runner and Maven test configuration.
+Cucumber execution reports are configured through the Maven test configuration.
 
-Generated logs and reports are available in the project's `target/` directory after execution.
+### Cucumber Reports
 
-Timestamped execution logs and reports help distinguish between different test runs.
+Cucumber HTML and JSON reports are generated using the configured Maven Surefire plugin.
+
+The reports use timestamped filenames to distinguish different test executions.
+
+### ExtentReports
+
+The framework integrates **ExtentReports with Cucumber 7** using the ExtentReports Cucumber adapter.
+
+ExtentReports generates a detailed HTML execution report with:
+
+- Feature-wise execution details.
+- Scenario-wise execution results.
+- Pass, Fail, and Skip statuses.
+- Execution summaries.
+- Timestamped report directories.
+
+**Configuration file:**
+
+```text
+src/test/resources/extent.properties
+```
+
+**Report output directory:**
+
+```text
+target/extent-reports/
+```
+
+Each execution generates a separate timestamped report directory, helping preserve previous execution reports.
+
+The current configuration uses `Spark.html` as the report filename inside the timestamped directory.
+
+### Publishing Execution Reports to GitHub
+
+Generated ExtentReports can be committed to the repository to showcase test execution results.
+
+If the report is under the Git-ignored `target/` directory, a specific report file can be force-added without changing `.gitignore`:
+
+```bash
+git add -f target/extent-reports/<report-folder>/Spark.html
+git commit -m "Add ExtentReports execution results"
+git push origin main
+```
+
+Before publishing reports to a public repository, ensure that they do not contain credentials, authentication tokens, cookies, or other sensitive information.
+
+### Other Maven Reports and Logs
+
+After execution, generated reports and test outputs can be found under:
+
+```text
+target/
+```
+
+Common Maven output locations include:
+
+- `target/surefire-reports/` – Maven test execution reports.
+- `target/cucumber-reports/` – Configured Cucumber HTML and JSON reports.
+- `target/extent-reports/` – ExtentReports HTML execution reports.
+- Configured logging output – Framework execution logs.
 
 ## Future Improvements
 
-- Complete end-to-end execution when the API endpoints become available.
-- Verify all positive, negative, and boundary scenarios against the live API.
-- Review and stabilise environment-dependent test cases.
-- Finalise execution reports and documentation.
-- Continuous Integration integration.
+- Stabilise dynamic and unique booking test-data generation.
+- Investigate live API failures across Get, Update, Partial Update, Delete, and Health Check.
+- Verify positive, negative, and boundary scenarios against the live API.
+- Review differences between the OpenAPI specification and actual API responses.
+- Investigate the missing `email` and `phone` fields in the Create Booking response.
+- Improve test repeatability and execution reliability.
+- Update documentation as API functionality becomes stable.
+- Introduce Continuous Integration when the framework is ready.
 
 ## Author
 

@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>org.example</groupId>
     <artifactId>API_Testing_Kata</artifactId>
     <version>1.0-SNAPSHOT</version>
+
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <cucumber.version>7.22.2</cucumber.version>
         <junit.version>5.12.2</junit.version>
         <junit.platform.version>1.12.2</junit.platform.version>
         <restassured.version>5.5.2</restassured.version>
         <lombok.version>1.18.42</lombok.version>
+
         <maven.build.timestamp.format>yyyy-MM-dd-HHmmss</maven.build.timestamp.format>
     </properties>
 
@@ -53,7 +56,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Rest Assured -->
+        <!-- REST Assured -->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
@@ -67,49 +70,60 @@
             <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- Jackson for JSON serialization and deserialization -->
-		<dependency>
-    		<groupId>com.fasterxml.jackson.core</groupId>
-    		<artifactId>jackson-databind</artifactId>
-    		<version>2.18.3</version>
-		</dependency>
-		<!-- Json schema Validation -->
-		<dependency>
-    		<groupId>io.rest-assured</groupId>
-    		<artifactId>json-schema-validator</artifactId>
-    		<version>5.5.2</version>
-    		<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-    		<groupId>io.cucumber</groupId>
-    		<artifactId>cucumber-picocontainer</artifactId>
-    		<version>7.22.2</version>
-    		<scope>test</scope>
-		</dependency>
-				
-		<!-- Log4j2 API -->
-		<dependency>
-    		<groupId>org.apache.logging.log4j</groupId>
-    		<artifactId>log4j-api</artifactId>
-    		<version>2.25.2</version>
-		</dependency>
 
-		<!-- Log4j2 Core -->
-		<dependency>
-    		<groupId>org.apache.logging.log4j</groupId>
-    		<artifactId>log4j-core</artifactId>
-    		<version>2.25.2</version>
-		</dependency>
-		
-		
-		<dependency>
-    		<groupId>com.networknt</groupId>
-    		<artifactId>json-schema-validator</artifactId>
-    		<version>1.5.9</version>
-    		<scope>test</scope>
-		</dependency>
-		
+        <!-- Jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.18.3</version>
+        </dependency>
+
+        <!-- JSON Schema Validation - REST Assured -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>${restassured.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Cucumber PicoContainer -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-picocontainer</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Log4j2 API -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.25.2</version>
+        </dependency>
+
+        <!-- Log4j2 Core -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.25.2</version>
+        </dependency>
+
+        <!-- NetworkNT JSON Schema Validator -->
+        <dependency>
+            <groupId>com.networknt</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>1.5.9</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- ExtentReports Cucumber 7 Adapter -->
+        <dependency>
+            <groupId>tech.grasshopper</groupId>
+            <artifactId>extentreports-cucumber7-adapter</artifactId>
+            <version>1.14.0</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -157,29 +171,28 @@
             </plugin>
 
             <!-- Maven Surefire -->
-            			
-			<plugin>
-    			<groupId>org.apache.maven.plugins</groupId>
-    			<artifactId>maven-surefire-plugin</artifactId>
-    			<version>3.5.2</version>
-    			<configuration>
-        		<systemPropertyVariables>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.2</version>
+                <configuration>
+                    <systemPropertyVariables>
 
-            	<log4j2.configurationFile>
-                	${project.basedir}/src/test/resources/logging/log4j2.xml
-            	</log4j2.configurationFile>
+                        <log4j2.configurationFile>
+                            ${project.basedir}/src/test/resources/logging/log4j2.xml
+                        </log4j2.configurationFile>
 
-            	<execution.timestamp>
-                	${maven.build.timestamp}
-            	</execution.timestamp>
+                        <execution.timestamp>
+                            ${maven.build.timestamp}
+                        </execution.timestamp>
 
-            	<cucumber.plugin>pretty,html:target/cucumber-reports/cucumber-report-${maven.build.timestamp}.html,json:target/cucumber-reports/cucumber-${maven.build.timestamp}.json</cucumber.plugin>
+                        <cucumber.plugin>pretty,html:target/cucumber-reports/cucumber-report-${maven.build.timestamp}.html,json:target/cucumber-reports/cucumber-${maven.build.timestamp}.json,com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:</cucumber.plugin>
 
-        		</systemPropertyVariables>
-    			</configuration>
-			</plugin>
-
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
 
         </plugins>
     </build>
+
 </project>
