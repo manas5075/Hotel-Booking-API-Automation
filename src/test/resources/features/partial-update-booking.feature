@@ -1,8 +1,8 @@
 @BookingAPI
 @PartialUpdateBooking
 Feature: Partial Update Booking API
-  Background:
-    Given the booking API client is initialized
+Background:
+  Given the booking API base URL is configured
 
   @PUB_01 @PositiveTest @SmokeTest
   Scenario: Update firstname only

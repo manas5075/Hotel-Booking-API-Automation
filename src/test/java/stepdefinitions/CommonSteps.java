@@ -2,8 +2,10 @@ package stepdefinitions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import context.ScenarioContext;
+import framework.config.ApiConfig;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 
@@ -13,6 +15,12 @@ public class CommonSteps {
 
     public CommonSteps(ScenarioContext scenarioContext) {
         this.scenarioContext = scenarioContext;
+    }
+    
+    @Given("the booking API base URL is configured")
+    public void theBookingApiBaseUrlIsConfigured() {
+        assertNotNull(ApiConfig.getBaseUrl());
+        assertFalse(ApiConfig.getBaseUrl().isBlank());
     }
 
     @Then("the API response status code should be {int}")

@@ -2,8 +2,8 @@
 @BookingAPI
 @CreateBooking
 Feature: Create Booking API
-  Background:
-    Given the booking API client is initialized
+Background:
+  Given the booking API base URL is configured
 
   @CB_01 @PositiveTest @SmokeTest
   Scenario: Create booking with valid details

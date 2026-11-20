@@ -1,9 +1,9 @@
 @BookingAPI
 @DeleteBooking
 Feature: Delete Booking API
-  Background:
-    Given the booking API client is initialized
-
+Background:
+  Given the booking API base URL is configured
+  
   @DB_01 @PositiveTest @SmokeTest
   Scenario: Delete an existing booking
     Given a booking has been created successfully

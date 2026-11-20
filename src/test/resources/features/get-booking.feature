@@ -1,8 +1,8 @@
 @BookingAPI
 @GetBooking
 Feature: Get Booking API
-  Background:
-    Given the booking API client is initialized
+Background:
+  Given the booking API base URL is configured
 
   @GB_01 @PositiveTest @SmokeTest
   Scenario: Retrieve an existing booking
