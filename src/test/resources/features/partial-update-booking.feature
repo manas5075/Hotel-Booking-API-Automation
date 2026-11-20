@@ -4,7 +4,7 @@ Feature: Partial Update Booking API
   Background:
     Given the booking API client is initialized
 
-  @PositiveTest
+  @PUB_01 @PositiveTest @SmokeTest
   Scenario: Update firstname only
     Given a booking has been created successfully
     When I partially update the booking with firstname "UpdatedName"
@@ -12,7 +12,7 @@ Feature: Partial Update Booking API
     And the booking firstname should be "UpdatedName"
     And the other booking details should remain unchanged
 
-  @PositiveTest
+  @PUB_02 @PositiveTest
   Scenario: Update lastname only
     Given a booking has been created successfully
     When I partially update the booking with lastname "UpdatedLastName"
@@ -20,7 +20,7 @@ Feature: Partial Update Booking API
     And the booking lastname should be "UpdatedLastName"
     And the other booking details should remain unchanged
 
-  @PositiveTest
+  @PUB_03 @PositiveTest
   Scenario: Update depositpaid only
     Given a booking has been created successfully
     When I partially update the booking depositpaid to false
@@ -28,7 +28,7 @@ Feature: Partial Update Booking API
     And the booking depositpaid should be false
     And the other booking details should remain unchanged
 
-  @PositiveTest
+  @PUB_04 @PositiveTest
   Scenario: Update multiple booking fields
     Given a booking has been created successfully
     When I partially update the booking with firstname "UpdatedName", lastname "UpdatedLastName" and depositpaid false
@@ -38,7 +38,7 @@ Feature: Partial Update Booking API
     And the booking depositpaid should be false
     And the other booking details should remain unchanged
 
-  @PositiveTest
+  @PUB_05 @PositiveTest
   Scenario: Create, fully update and partially update a booking
     Given a booking has been created successfully
     And I am authenticated
@@ -49,21 +49,21 @@ Feature: Partial Update Booking API
     And the booking firstname should be "FinalUpdatedName"
     And the other booking details should remain unchanged
 
-  @NegativeTest
+  @PUB_06 @NegativeTest
   Scenario: Reject partial update without authentication
     Given a booking has been created successfully
     And no authentication token is available
     When I partially update the booking with firstname "UpdatedName"
     Then the API response status code should be 401
 
-  @NegativeTest
+  @PUB_07 @NegativeTest
   Scenario: Reject partial update with invalid authentication
     Given a booking has been created successfully
     And an invalid authentication token is available
     When I partially update the booking with firstname "UpdatedName"
     Then the API response status code should be 401
 
-  @NegativeTest
+  @PUB_08 @NegativeTest
   Scenario Outline: Reject partial update with invalid request data
     Given a booking has been created successfully
     When I partially update the booking using test data "<fileName>"

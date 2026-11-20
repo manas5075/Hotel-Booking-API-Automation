@@ -4,7 +4,7 @@ Feature: Update Booking API
   Background:
     Given the booking API client is initialized
 
-  @PositiveTest
+  @UB_01 @PositiveTest @SmokeTest
   Scenario: Update an existing booking with valid details
     Given a booking has been created successfully
     And I am authenticated
@@ -12,7 +12,7 @@ Feature: Update Booking API
     Then the API response status code should be 200
     And the updated booking details should match the request
 
-  @PositiveTest
+  @UB_02 @PositiveTest
   Scenario: Update booking with minimum valid field lengths
     Given a booking has been created successfully
     And I am authenticated
@@ -20,7 +20,7 @@ Feature: Update Booking API
     Then the API response status code should be 200
     And the updated booking details should match the request
 
-  @PositiveTest
+  @UB_03 @PositiveTest
   Scenario: Update booking with maximum valid field lengths
     Given a booking has been created successfully
     And I am authenticated
@@ -28,7 +28,7 @@ Feature: Update Booking API
     Then the API response status code should be 200
     And the updated booking details should match the request
 
-  @NegativeTest
+  @UB_04 @NegativeTest
   Scenario Outline: Reject update with invalid name lengths
     Given a booking has been created successfully
     And I am authenticated
@@ -41,7 +41,7 @@ Feature: Update Booking API
       | 3               | 2              |
       | 3               | 19             |
 
-  @NegativeTest
+  @UB_05 @NegativeTest
   Scenario Outline: Reject update with invalid phone length
     Given a booking has been created successfully
     And I am authenticated
@@ -52,7 +52,7 @@ Feature: Update Booking API
       | 10          |
       | 22          |
 
-  @NegativeTest
+  @UB_06 @NegativeTest
   Scenario Outline: Reject update with invalid email
     Given a booking has been created successfully
     And I am authenticated
@@ -65,82 +65,82 @@ Feature: Update Booking API
       | @example.com     |
       | user.example.com |
 
-  @NegativeTest
+  @UB_07 @NegativeTest
   Scenario: Reject update with checkout date before checkin date
     Given a booking has been created successfully
     And I am authenticated
     When I update the booking with checkout date before checkin date
     Then the booking update should be rejected with validation errors
 
-  @NegativeTest
+  @UB_08 @NegativeTest
   Scenario: Reject update without authentication
     Given a booking has been created successfully
     And no authentication token is available
     When I update the booking with valid details
     Then the API response status code should be 401
 
-  @NegativeTest
+  @UB_09 @NegativeTest
   Scenario Outline: Reject update with missing required fields
     Given a booking has been created successfully
     And I am authenticated
     When I update the booking using test data "<fileName>"
     Then the booking update should be rejected with validation errors
     Examples:
-      | fileName              |
+      | fileName                 |
       | missing-bookingdates.json |
       | missing-depositpaid.json  |
 
-  @NegativeTest
+  @UB_10 @NegativeTest
   Scenario Outline: Reject update with invalid field data types
     Given a booking has been created successfully
     And I am authenticated
     When I update the booking using test data "<fileName>"
     Then the booking update should be rejected with validation errors
     Examples:
-      | fileName                   |
-      | invalid-roomid-type.json   |
-      | invalid-firstname-type.json|
-      | invalid-lastname-type.json |
+      | fileName                    |
+      | invalid-roomid-type.json    |
+      | invalid-firstname-type.json |
+      | invalid-lastname-type.json  |
       | invalid-bookingdates-type.json |
-      | invalid-email-type.json    |
-      | invalid-phone-type.json    |
+      | invalid-email-type.json     |
+      | invalid-phone-type.json     |
 
-  @NegativeTest
+  @UB_11 @NegativeTest
   Scenario Outline: Reject update with invalid date formats
     Given a booking has been created successfully
     And I am authenticated
     When I update the booking using test data "<fileName>"
     Then the booking update should be rejected with validation errors
     Examples:
-      | fileName                       |
-      | invalid-checkin-date-format.json  |
+      | fileName                         |
+      | invalid-checkin-date-format.json |
       | invalid-checkout-date-format.json |
 
-  @NegativeTest
+  @UB_12 @NegativeTest
   Scenario Outline: Reject update with empty field values
     Given a booking has been created successfully
     And I am authenticated
     When I update the booking using test data "<fileName>"
     Then the booking update should be rejected with validation errors
     Examples:
-      | fileName           |
+      | fileName            |
       | empty-firstname.json |
       | empty-lastname.json  |
       | empty-email.json     |
       | empty-phone.json     |
 
-  @NegativeTest
+  @UB_13 @NegativeTest
   Scenario Outline: Reject update with invalid room ID
     Given a booking has been created successfully
     And I am authenticated
     When I update the booking using test data "<fileName>"
     Then the booking update should be rejected with validation errors
     Examples:
-      | fileName          |
+      | fileName             |
       | negative-roomid.json |
       | zero-roomid.json     |
 
-  @NegativeTest
+  @UB_14 @NegativeTest
   Scenario: Reject update with invalid authentication token
     Given a booking has been created successfully
     And an invalid authentication token is available
