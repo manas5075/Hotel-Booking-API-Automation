@@ -124,4 +124,15 @@ public class GetBookingSteps {
         assertNotNull(error,
                 "Expected an authorization error message");
     }
+    
+    @When("I retrieve a booking using ID {int}")
+    public void retrieveBookingUsingId(int id) {
+
+        Response response = bookingClient.getBooking(
+                id,
+                scenarioContext.getAuthToken()
+        );
+
+        scenarioContext.setResponse(response);
+    }
 }

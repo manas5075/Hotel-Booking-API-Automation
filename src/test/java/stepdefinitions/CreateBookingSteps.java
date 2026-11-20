@@ -225,4 +225,11 @@ public class CreateBookingSteps {
         assertFalse(errors.isEmpty(),
                 "Expected at least one validation error");
     }
+    
+    @Then("the booking response should match the JSON schema")
+    public void verifyBookingResponseSchema() {
+        ApiAssertions.assertBookingResponseSchema(
+            scenarioContext.getResponse()
+        );
+    }
 }
