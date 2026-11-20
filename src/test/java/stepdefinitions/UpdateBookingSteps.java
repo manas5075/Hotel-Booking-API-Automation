@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import com.booking.builders.BookingBuilder;
-import com.booking.models.Booking;
+import builders.BookingBuilder;
+import framework.models.Booking;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 

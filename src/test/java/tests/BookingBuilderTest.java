@@ -2,8 +2,8 @@ package tests;
 
 import org.junit.jupiter.api.Test;
 
-import com.booking.builders.BookingBuilder;
-import com.booking.models.Booking;
+import builders.BookingBuilder;
+import framework.models.Booking;
 
 import static org.junit.jupiter.api.Assertions.*;
 

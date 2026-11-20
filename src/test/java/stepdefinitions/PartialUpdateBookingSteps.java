@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.booking.builders.BookingBuilder;
-import com.booking.models.Booking;
+import builders.BookingBuilder;
+import framework.models.Booking;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 

@@ -3,8 +3,8 @@ package stepdefinitions;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.booking.builders.BookingBuilder;
-import com.booking.models.Booking;
+import builders.BookingBuilder;
+import framework.models.Booking;
 
 import assertions.ApiAssertions;
 import context.ScenarioContext;

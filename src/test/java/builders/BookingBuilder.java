@@ -1,10 +1,10 @@
 
-package com.booking.builders;
+package builders;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.booking.models.Booking;
+import framework.models.Booking;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public final class BookingBuilder {
@@ -18,7 +18,7 @@ public final class BookingBuilder {
     public static Booking createValidBooking() {
         try (InputStream inputStream =
                      BookingBuilder.class.getClassLoader()
-                             .getResourceAsStream("testdata/booking.json")) {
+                             .getResourceAsStream("testdata/booking/booking.json")) {
 
             if (inputStream == null) {
                 throw new IllegalStateException(
