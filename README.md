@@ -360,7 +360,12 @@ Cucumber HTML and JSON reports are generated using the configured Maven Surefire
 
 The reports use timestamped filenames to distinguish different test executions.
 
-### ExtentReports
+
+### ExtentReports Execution Report
+
+The framework generates interactive HTML execution reports with scenario-level results, execution status, and test details.
+
+![ExtentReports Execution Report](Screenshots/Execution Report.png)
 
 The framework integrates **ExtentReports with Cucumber 7** using the ExtentReports Cucumber adapter.
 
