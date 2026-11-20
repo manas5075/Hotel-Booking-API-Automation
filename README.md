@@ -1,703 +1,299 @@
-# Hotel Booking API Automation Framework
+# Hotel Booking API Automation
 
-A modular Java-based REST API automation framework designed to validate hotel booking services using **Rest Assured, Cucumber, Java 17, Maven, and JUnit 5**.
+A Java-based API automation framework for testing the Restful Booker API using REST Assured, Cucumber, and JUnit 5.
 
-The framework focuses on API functional testing, authentication, request and response validation, negative testing, reusable automation components, and Behaviour-Driven Development (BDD).
+The framework supports data-driven testing, JSON Schema validation, reusable authentication, request and response assertions, logging, and test reporting.
 
-The objective is to provide a maintainable and extensible automation solution that supports reliable validation of hotel booking API workflows.
+## Project Overview
 
----
+The project automates positive and negative test scenarios for the following API endpoints:
 
-## 1. Project Overview
+| API | HTTP Method | Endpoint |
+|---|---|---|
+| Authentication | POST | `/auth/login` |
+| Create Booking | POST | `/booking` |
+| Get Booking | GET | `/booking/{id}` |
+| Update Booking | PUT | `/booking/{id}` |
+| Partial Update Booking | PATCH | `/booking/{id}` |
+| Delete Booking | DELETE | `/booking/{id}` |
+| Health Check | GET | `/booking/actuator/health` |
 
-### Purpose
+## Technology Stack
 
-This project demonstrates the design and implementation of a reusable REST API automation framework for a hotel booking application.
+- **Java 17** – Programming language
+- **Maven** – Build and dependency management
+- **REST Assured** – API automation
+- **Cucumber** – Behaviour-Driven Development (BDD)
+- **JUnit 5** – Test execution
+- **Jackson** – JSON serialization and deserialization
+- **JSON Schema Validator** – Request and response schema validation
+- **Log4j2** – Logging
 
-It automates API operations across the booking lifecycle, including authentication, booking creation, retrieval, modification, and deletion.
+## Framework Features
 
-The framework separates API communication, test execution, configuration, test data, and validation logic to improve maintainability and reusability.
+- Reusable API client classes for endpoint interactions.
+- Centralized request specification.
+- Reusable authentication and token management through scenario context.
+- Positive and negative API test scenarios.
+- Boundary-value testing for applicable booking fields.
+- Data-driven testing using external JSON files.
+- JSON Schema validation for applicable API requests and responses.
+- Reusable API response assertions.
+- Retry mechanism for selected transient failures on GET requests.
+- Scenario-level context management to support parallel execution.
+- Timestamped execution logs and Cucumber reports.
 
-### Key Objectives
-
-- Develop a reusable API automation framework using Java.
-- Automate REST APIs using Rest Assured.
-- Implement BDD using Cucumber and Gherkin.
-- Validate HTTP status codes, response payloads, and API behaviour.
-- Cover positive, negative, and boundary-value scenarios.
-- Implement authentication and token management.
-- Apply suitable design patterns to improve maintainability.
-- Separate configuration and test data from automation logic.
-- Support API contract and JSON schema validation.
-- Generate readable test execution reports.
-
-### Application Under Test
-
-**Application:** Restful Booker
-
-**Application URL:**  
-https://automationintesting.online/
-
-**API Base URL:**
-
-```text
-https://automationintesting.online/api
-```
-
-**API Documentation:**
-
-- [Booking API Swagger](https://automationintesting.online/booking/swagger-ui/index.html)
-- [Authentication API Swagger](https://automationintesting.online/auth/swagger-ui/index.html)
-
-**OpenAPI Specification:**
-
-The API specification is maintained locally:
-
-`src/test/resources/spec/booking.yaml`
-
----
-
-## 2. Technology Stack
-
-| Technology | Purpose |
-|---|---|
-| Java 17 | Programming language |
-| Maven | Build and dependency management |
-| Rest Assured | REST API automation |
-| Cucumber | Behaviour-Driven Development |
-| Gherkin | Business-readable test scenarios |
-| JUnit 5 | Test execution platform |
-| Jackson | JSON serialization and deserialization |
-| Lombok | Boilerplate code reduction |
-| PicoContainer | Scenario-level dependency sharing |
-| JSON Schema Validator | API response schema validation |
-| SoapUI | Planned API mocking |
-| Git | Version control |
-| GitHub | Source code management |
-
----
-
-## 3. Framework Architecture
-
-The framework follows a modular, layered architecture. Each component has a specific responsibility, helping to separate test scenarios from API communication and validation logic.
-
-### Architecture Diagram
+## Project Structure
 
 ```text
-                  Cucumber Feature Files
-                           |
-                           v
-                    Test Runner
-                           |
-                           v
-                    Step Definitions
-                           |
-                           v
-                    API Client Layer
-                    /              \
-                   v                v
-              AuthClient       BookingClient
-                   \                /
-                    v              v
-                Request Specification
-                       Factory
-                           |
-                           v
-                       Rest Assured
-                           |
-                           v
-                    Hotel Booking API
-```
-
-### Supporting Components
-
-```text
-+------------------------------------------------+
-|                Supporting Layer                |
-+------------------------------------------------+
-| Configuration Management                       |
-| API Constants                                  |
-| Authentication and Token Management            |
-| Request and Response Models                    |
-| Booking Test Data Builder                      |
-| Scenario Context                               |
-| Reusable API Assertions                        |
-| Cucumber Hooks                                 |
-| JSON Schema Validation                         |
-| Test Reporting                                 |
-+------------------------------------------------+
-```
-
-### Component Responsibilities
-
-| Component | Responsibility |
-|---|---|
-| Feature Files | Define API scenarios in Gherkin |
-| Test Runner | Configure and execute Cucumber tests |
-| Step Definitions | Connect Gherkin steps to automation logic |
-| API Clients | Encapsulate API endpoint interactions |
-| RequestSpecFactory | Build reusable Rest Assured specifications |
-| ApiConfig | Manage API configuration |
-| TokenManager | Handle authentication token management |
-| Models | Represent request and response payloads |
-| BookingBuilder | Create reusable booking test data |
-| ScenarioContext | Share data between steps within a scenario |
-| CucumberHooks | Manage scenario-level setup and teardown |
-| ApiAssertions | Centralize reusable API assertions |
-
----
-
-## 4. Project Structure
-
-The project follows a Maven-based directory structure.
-
-```text
-Hotel-Booking-API-Automation/
+API_Testing_Kata/
 │
 ├── src/
 │   ├── main/
 │   │   └── java/
-│   │       └── framework/
-│   │           ├── clients/
-│   │           │   ├── AuthClient.java
-│   │           │   └── BookingClient.java
-│   │           │
-│   │           ├── config/
-│   │           │   └── ApiConfig.java
-│   │           │
-│   │           ├── constants/
-│   │           │   └── ApiConstants.java
-│   │           │
-│   │           ├── models/
-│   │           │   ├── Booking.java
-│   │           │   └── Bookingdates.java
-│   │           │
-│   │           ├── specification/
-│   │           │   └── RequestSpecFactory.java
-│   │           │
-│   │           └── utils/
-│   │               └── TokenManager.java
+│   │       ├── assertions/
+│   │       ├── framework/
+│   │       │   ├── clients/
+│   │       │   ├── config/
+│   │       │   ├── constants/
+│   │       │   ├── specification/
+│   │       │   └── utils/
+│   │       └── com/
+│   │           └── booking/
+│   │               ├── builders/
+│   │               └── models/
 │   │
 │   └── test/
 │       ├── java/
-│       │   ├── assertions/
-│       │   │   └── ApiAssertions.java
-│       │   │
-│       │   ├── com/booking/
-│       │   │   ├── BookingBuilderTest.java
-│       │   │   ├── builders/
-│       │   │   │   └── BookingBuilder.java
-│       │   │   └── stepdefinitions/
-│       │   │       └── GetMessages.java
-│       │   │
 │       │   ├── context/
-│       │   │   └── ScenarioContext.java
-│       │   │
-│       │   ├── framework/specification/
-│       │   │   └── RequestSpecFactoryTest.java
-│       │   │
 │       │   ├── hooks/
-│       │   │   └── CucumberHooks.java
-│       │   │
 │       │   ├── runners/
-│       │   │   └── TestRunner.java
-│       │   │
 │       │   └── stepdefinitions/
-│       │       ├── AuthSteps.java
-│       │       ├── BookingSteps.java
-│       │       ├── CreateBookingSteps.java
-│       │       ├── DeleteBookingSteps.java
-│       │       ├── GetBookingSteps.java
-│       │       ├── HealthCheckSteps.java
-│       │       ├── PartialUpdateBookingSteps.java
-│       │       └── UpdateBookingSteps.java
 │       │
 │       └── resources/
-│           ├── config/
-│           │   ├── config-qa.properties
-│           │   └── config-mock.properties
-│           │
 │           ├── features/
-│           │   ├── authentication.feature
-│           │   ├── boooking.feature
-│           │   ├── create-booking.feature
-│           │   ├── delete.feature
-│           │   ├── get-booking.feature
-│           │   ├── healthcheck.feature
-│           │   ├── messages.feature
-│           │   ├── partial-update-booking.feature
-│           │   └── update-booking.feature
-│           │
 │           ├── schemas/
-│           │   └── booking-response-schema.json
-│           │
-│           ├── spec/
-│           │   └── booking.yaml
-│           │
-│           └── testdata/
-│               └── booking.json
+│           │   ├── request/
+│           │   ├── response/
+│           │   └── contracts/
+│           ├── testdata/
+│           │   ├── booking/
+│           │   └── partial-update/
+│           ├── logging/
+│           └── junit-platform.properties
 │
-├── .gitignore
 ├── pom.xml
 └── README.md
 ```
 
-### Package Responsibilities
+## API Test Coverage
 
-**framework.clients**
+### 1. Authentication API
 
-Contains API client classes that encapsulate endpoint interactions.
+- Successful authentication.
+- Invalid credentials.
+- Missing and null credentials.
+- Invalid credential data types.
+- Empty credentials.
+- Leading and trailing whitespace.
+- Long username and password values.
+- Authentication response validation.
 
-**framework.config**
+### 2. Create Booking API
 
-Centralizes API configuration and environment-related settings.
+- Successful booking creation.
+- Minimum and maximum valid field lengths.
+- Invalid name and phone lengths.
+- Invalid email formats.
+- Invalid booking dates.
+- Missing mandatory fields.
+- Invalid field data types.
+- Room ID boundary values.
+- Booking request and response schema validation.
 
-**framework.constants**
+### 3. Get Booking API
 
-Maintains reusable API constants such as endpoint paths and configuration keys.
-
-**framework.models**
-
-Contains Java models representing API request and response structures.
-
-**framework.specification**
-
-Provides reusable Rest Assured request specifications.
-
-**framework.utils**
-
-Contains utility components such as authentication token management.
-
-**stepdefinitions**
-
-Contains Cucumber step definitions that implement the actions described in feature files.
-
-**context**
-
-Manages shared scenario-level data.
-
-**hooks**
-
-Contains Cucumber lifecycle hooks.
-
-**assertions**
-
-Provides reusable API validation methods.
-
-**builders**
-
-Contains reusable test-data construction logic.
-
-**resources**
-
-Stores feature files, configuration, test data, API specifications, and schemas.
-
----
-
-## 5. Design Patterns and Framework Principles
-
-The framework uses several reusable design approaches.
-
-### Builder Pattern
-
-**Implementation:** `BookingBuilder`
-
-The Builder pattern is used to construct booking test data.
-
-It helps create reusable booking objects without duplicating object construction logic across test scenarios.
-
-**Benefits:**
-- Centralized test-data construction.
-- Improved readability.
-- Easier maintenance.
-- Flexible booking data creation.
-
-### Factory Pattern
-
-**Implementation:** `RequestSpecFactory`
-
-The Factory pattern is used to create reusable Rest Assured request specifications.
-
-It centralizes common request configuration and reduces duplication across API clients.
-
-**Benefits:**
-- Consistent request configuration.
-- Reduced duplication.
-- Easier maintenance of common API settings.
-
-### Scenario Context
-
-**Implementation:** `ScenarioContext`
-
-Scenario-level context is used to share data between Cucumber steps.
-
-For example, a booking ID created in one step can be reused in subsequent retrieval, update, or deletion steps.
-
-**Benefits:**
-- Avoids unnecessary repeated API calls.
-- Supports multi-step API workflows.
-- Keeps scenario data isolated.
-
-### Separation of Concerns
-
-The framework separates:
-- API communication.
-- Configuration.
-- Test data.
-- Scenario execution.
-- Assertions.
-- Reporting.
-
-This makes the framework easier to extend and maintain.
-
----
-
-## 6. API Test Coverage
-
-The framework covers the core hotel booking API lifecycle.
-
-| API | Method | Test Objective |
-|---|---|---|
-| Health Check | GET | Verify service health |
-| Authentication | POST | Obtain authentication token |
-| Create Booking | POST | Create a booking |
-| Get Booking | GET | Retrieve booking details |
-| Update Booking | PUT | Replace booking details |
-| Partial Update | PATCH | Update selected booking fields |
-| Delete Booking | DELETE | Delete a booking |
-
-### Functional Test Scenarios
-
-**Health Check**
-- Validate successful health-check response.
-- Validate the returned service status.
-
-**Authentication**
-- Validate successful authentication.
-- Validate invalid authentication credentials.
-- Validate token handling.
-
-**Create Booking**
-- Create a booking using valid request data.
-- Validate response status and booking details.
-- Validate missing mandatory fields.
-- Validate invalid field values.
-- Validate booking date rules.
-
-**Get Booking**
 - Retrieve an existing booking.
-- Validate booking response fields.
-- Validate invalid booking identifiers.
-- Validate authorization behaviour.
+- Retrieve an unknown booking ID.
+- Retrieve without authentication.
+- Retrieve with invalid authentication.
 
-**Update Booking**
-- Replace existing booking information.
-- Validate updated response data.
-- Validate invalid booking identifiers.
-- Validate authorization behaviour.
+### 4. Update Booking API (PUT)
 
-**Partial Update Booking**
-- Update selected booking attributes.
-- Verify unchanged attributes remain intact.
-- Validate invalid update requests.
+- Update an existing booking.
+- Minimum and maximum valid field lengths.
+- Invalid name and phone lengths.
+- Invalid email formats.
+- Invalid booking dates.
+- Authentication validation.
+- Additional JSON-driven negative test cases.
 
-**Delete Booking**
+### 5. Partial Update Booking API (PATCH)
+
+- Update firstname only.
+- Update lastname only.
+- Update depositpaid only.
+- Update multiple fields in one request.
+- Verify fields not included in the request remain unchanged.
+- Authentication validation.
+- Empty, null, and invalid data values.
+- Partial update request schema validation.
+
+### 6. Delete Booking API
+
 - Delete an existing booking.
-- Validate deletion response.
-- Verify subsequent retrieval behaviour.
-- Validate authorization behaviour.
+- Verify a deleted booking cannot be retrieved.
+- Delete without authentication.
+- Delete with invalid authentication.
+- Delete using an unknown booking ID.
+- Boundary booking ID tests.
 
-*The scenarios above describe the intended coverage areas. Actual scenario implementation and execution status should be verified against the feature files and test reports.*
+### 7. Health Check API
 
----
+- Verify HTTP 200 response.
+- Verify health status is `UP`.
+- Verify the response contains the expected status field.
+- Health response schema validation.
 
-## 7. Test Data Management
+## JSON Schema Validation
 
-Test data is maintained separately from automation logic.
-
-Current test-data resources:
-
-```text
-src/test/resources/testdata/booking.json
-```
-
-The framework uses `BookingBuilder` to construct booking objects from reusable test data.
-
-The booking models represent request and response payloads, while Jackson supports JSON serialization and deserialization.
-
-### Benefits
-
-- Reduced hardcoded test data.
-- Reusable booking objects.
-- Easier maintenance.
-- Better separation between test data and test logic.
-
----
-
-## 8. Configuration Management
-
-The framework maintains separate configuration files for different execution environments.
+JSON schemas are maintained under:
 
 ```text
-src/test/resources/config/
-    ├── config-qa.properties
-    └── config-mock.properties
+src/test/resources/schemas/
 ```
 
-### Configuration Responsibilities
+- `request/` – Request payload schemas.
+- `response/` – API response schemas.
+- `contracts/` – Additional API response contract checks.
 
-- API base URL.
-- Environment-specific settings.
-- Common endpoint configuration.
-- Mock service configuration.
+The framework uses JSON Schema Draft-07 for schema validation.
 
-The configuration layer is managed through `ApiConfig`.
+The schemas were created using the supplied OpenAPI YAML specification as the reference for request and response structures.
 
-Sensitive credentials and tokens should not be committed to source control. They should be supplied through environment variables or a secure secrets-management solution.
+## Test Data Management
 
-*The exact configuration selection mechanism and supported command-line properties should be documented once verified in the implementation.*
+External JSON files are maintained under:
 
----
-
-## 9. Prerequisites
-
-Install the following tools before running the framework:
-
-- Java Development Kit 17.
-- Apache Maven.
-- Git.
-- Eclipse or IntelliJ IDEA (optional).
-
-Verify installations:
-
-```bash
-java -version
-mvn -version
-git --version
+```text
+src/test/resources/testdata/
 ```
 
----
+The test data is organised into:
 
-## 10. Setup and Installation
+- `booking/` – Create Booking and Update Booking test data.
+- `partial-update/` – Partial Update Booking test data.
 
-Clone the repository:
+This approach separates test data from Gherkin scenarios and Java step definitions, making test cases easier to maintain and extend.
 
-```bash
-git clone https://github.com/manas5075/Hotel-Booking-API-Automation.git
-```
+## Configuration
 
-Navigate to the project:
+The framework uses centralized configuration through `ApiConfig` and request specifications through `RequestSpecFactory`.
 
-```bash
-cd Hotel-Booking-API-Automation
-```
+Configure the API base URL and credentials using the project's existing configuration files or supported environment settings.
 
-Compile the project:
+Do not commit real credentials, authentication tokens, or other secrets to the repository.
 
-```bash
-mvn clean compile
-```
+## API Environment and Current Testing Status
 
-Compile test classes:
+The project targets the Restful Booker API.
+
+**API base URL:**
+
+https://automationintesting.online/api
+
+**Endpoint availability:** During framework development, the API endpoints were inactive or unavailable for reliable live testing.
+
+To continue framework development despite this limitation, the supplied OpenAPI YAML specification was used as the primary reference for:
+
+- Identifying API endpoints and HTTP methods.
+- Understanding request parameters and response structures.
+- Designing request and response JSON schemas.
+- Creating positive and negative test scenarios.
+- Identifying mandatory fields and supported data types.
+- Defining contract-based response expectations.
+
+### Schema Development and Local Validation
+
+JSON Schema files were generated based on the OpenAPI YAML specification.
+
+The schemas were validated locally using the project's `SchemaValidationTest`.
+
+The schema validation execution completed successfully:
+
+- 2 tests executed.
+- 0 failures.
+- 0 errors.
+- Build successful.
+
+This confirms that the schema documents are valid and that the intentionally invalid schema definition is rejected.
+
+### Important Testing Limitation
+
+Successful local schema validation and Java compilation do not confirm that the live API behaves as expected.
+
+Full end-to-end API execution, including actual response status codes, authentication behaviour, booking creation, updates, and deletion, remains subject to endpoint availability.
+
+Some additional negative and boundary scenarios are robustness tests whose expected behaviour is not explicitly defined in the supplied OpenAPI specification. These expectations must be confirmed against the live API when it becomes available.
+
+The API environment may reset periodically, so existing booking data and availability can change between executions.
+
+## Running the Tests
+
+Run the following commands from the project root.
+
+**Compile the project and test sources:**
 
 ```bash
 mvn test-compile
 ```
 
----
-
-## 11. Test Execution
-
-Execute the complete Maven test suite:
+**Run schema validation tests:**
 
 ```bash
-mvn clean test
+mvn -Dtest=SchemaValidationTest test
 ```
 
-Execute the Cucumber runner:
+**Run unit tests for the retry utility:**
 
 ```bash
-mvn clean test -Dtest=TestRunner
+mvn -Dtest=RetryUtilsTest test
 ```
 
-Capture test execution output locally:
+**Run the complete test suite:**
 
 ```bash
-mvn clean test -Dtest=TestRunner > test-run-log.txt 2>&1
+mvn test -Dtest=TestRunner
 ```
 
-### Cucumber Tag Execution
-
-The Cucumber JUnit Platform engine supports tag filtering.
-
-Once the corresponding tags are added to the feature scenarios, selected tests can be executed using:
+**Run an individual feature:**
 
 ```bash
-mvn clean test -Dcucumber.filter.tags="@smoke"
+mvn test -Dtest=TestRunner -Dcucumber.features=src/test/resources/features/create-booking.feature
 ```
 
-Other useful tag groups may include:
+Replace `create-booking.feature` with the feature file you want to execute.
 
-```text
-@regression
-@authentication
-@booking
-@negative
-```
+Note: Complete end-to-end API verification requires an available API environment.
 
-Only tags defined in the feature files will be selected.
+## Logging and Reports
 
----
+The framework uses Log4j2 for execution logging.
 
-## 12. Test Reporting
+Cucumber execution reports are configured through the test runner and Maven test configuration.
 
-The framework uses Maven Surefire and Cucumber test execution infrastructure.
+Generated logs and reports are available in the project's `target/` directory after execution.
 
-### Maven Surefire Reports
+Timestamped execution logs and reports help distinguish between different test runs.
 
-Maven Surefire generates execution reports under:
+## Future Improvements
 
-```text
-target/surefire-reports/
-```
+- Complete end-to-end execution when the API endpoints become available.
+- Verify all positive, negative, and boundary scenarios against the live API.
+- Review and stabilise environment-dependent test cases.
+- Finalise execution reports and documentation.
+- Continuous Integration integration.
 
-These reports provide test execution summaries and failure information.
+## Author
 
-### Cucumber Reports
-
-Cucumber HTML and JSON reports can provide:
-- Feature-level execution results.
-- Scenario-level status.
-- Step-level results.
-- Failure details.
-
-The exact report paths depend on the Cucumber runner configuration.
-
-### Allure Reporting
-
-Allure is a potential future enhancement for:
-- Rich test execution dashboards.
-- Historical execution trends.
-- Detailed test-step reporting.
-- Attachments and failure diagnostics.
-
----
-
-## 13. CI/CD Integration
-
-Automated CI/CD execution is a planned enhancement.
-
-GitHub Actions can be introduced to:
-- Compile the Java project.
-- Execute Maven test suites.
-- Publish test execution results.
-- Provide automated feedback on pull requests.
-
-The pipeline will be introduced after the test suite and environment configuration are stable.
-
----
-
-## 14. Troubleshooting
-
-### Maven Build Failure
-
-Check:
-- Java 17 installation.
-- Maven installation.
-- Dependency resolution.
-- Compilation errors.
-
-Commands:
-
-```bash
-java -version
-mvn -version
-mvn clean test
-```
-
-### Undefined Cucumber Steps
-
-Possible causes:
-- Missing step definitions.
-- Incorrect Cucumber glue configuration.
-- Mismatch between Gherkin expressions and Java step annotations.
-
-### API Connection Errors
-
-Possible causes:
-- API service unavailable.
-- Incorrect base URL.
-- Network connectivity issues.
-- Environment configuration problems.
-
-### Unexpected HTTP Status Codes
-
-Check:
-- Request payload.
-- Authentication token.
-- API endpoint.
-- Expected API behaviour.
-- External service availability.
-
-### Booking Creation Conflicts
-
-A booking API may reject requests because of application-specific validation or conflicting test data. Check the response body and server behaviour before changing assertions.
-
-### Authentication Failures
-
-Check:
-- Credentials.
-- Token generation.
-- Token propagation.
-- Authorization requirements for protected endpoints.
-
----
-## 15. Framework Features
-
-### Parallel Execution
-- Supports parallel execution of Cucumber scenarios using JUnit 5.
-- Configured through `junit-platform.properties`.
-- Currently configured to execute a maximum of 2 scenarios concurrently.
-- Uses scenario-level context (`ScenarioContext`) to isolate authentication tokens, responses, and booking IDs.
-- Designed to reduce shared-state conflicts during concurrent test execution.
-
-### Retry Mechanism
-- Includes a reusable `RetryUtils` utility for handling transient API failures.
-- Supports retries for HTTP 429, 502, 503, and 504 responses.
-- Handles selected temporary connection failures.
-- Retry count is configurable through environment-specific properties files.
-- Uses `retry.count=0` by default, so retries are currently disabled.
-- Each retry waits 500 milliseconds before the next attempt.
-- Initially integrated with GET booking requests only.
-
-
-## 16. Future Enhancements
-
-The framework will continue to evolve with the following improvements:
-
-- Complete and stabilize all Cucumber scenarios.
-- Expand positive, negative, and boundary-value testing.
-- Improve authentication and token lifecycle management.
-- Integrate SoapUI mock services.
-- Enhance structured logging.
-- Improve test isolation and execution reliability.
-- Implement comprehensive Cucumber HTML reporting.
-- Evaluate Allure reporting.
-- Improve environment configuration and secrets management.
-- Introduce GitHub Actions CI/CD after stabilizing the test suite.
-- Strengthen API contract validation.
-- Introduce reliable parallel execution where appropriate.
-
----
-
-## 17. Author
-
-**Manas Behera**
-
-Java | REST API Automation | Rest Assured | Cucumber | Maven
-
-**Project:** Hotel Booking API Automation Framework
-
-**GitHub Repository:**
-
-https://github.com/manas5075/Hotel-Booking-API-Automation
+Hotel Booking API Automation Project
