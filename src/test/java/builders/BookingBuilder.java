@@ -23,18 +23,29 @@ public final class BookingBuilder {
                 .replace("-", "")
                 .substring(0, 8);
 
-        booking.setRoomid(2);
+        booking.setRoomid(
+                ThreadLocalRandom.current().nextInt(1, 100)
+        );
         booking.setFirstname("Test" + uniqueId);
         booking.setLastname("User" + uniqueId);
         booking.setDepositpaid(true);
         booking.setEmail("test" + uniqueId + "@example.com");
-        booking.setPhone("12345678901");
 
-        // Generate random check-in date between 1 and 30 days from today
-        int randomDays = ThreadLocalRandom.current().nextInt(1, 31);
+        // Generate a random phone number
+        booking.setPhone(randomDigits(11));
 
-        LocalDate checkinDate = LocalDate.now().plusDays(randomDays);
-        LocalDate checkoutDate = checkinDate.plusDays(3);
+        // Generate random booking dates
+        int randomCheckinDays = ThreadLocalRandom.current()
+                .nextInt(1, 91);
+
+        int randomStayDays = ThreadLocalRandom.current()
+                .nextInt(1, 8);
+
+        LocalDate checkinDate =
+                LocalDate.now().plusDays(randomCheckinDays);
+
+        LocalDate checkoutDate =
+                checkinDate.plusDays(randomStayDays);
 
         Bookingdates bookingdates = new Bookingdates();
         bookingdates.setCheckin(checkinDate.toString());
@@ -50,8 +61,8 @@ public final class BookingBuilder {
 
         Booking booking = createValidBooking();
 
-        booking.setFirstname("A".repeat(firstnameLength));
-        booking.setLastname("B".repeat(lastnameLength));
+        booking.setFirstname(randomLetters(firstnameLength));
+        booking.setLastname(randomLetters(lastnameLength));
 
         return booking;
     }
@@ -59,7 +70,8 @@ public final class BookingBuilder {
     public static Booking createBookingWithPhoneLength(int phoneLength) {
 
         Booking booking = createValidBooking();
-        booking.setPhone("1".repeat(phoneLength));
+
+        booking.setPhone(randomDigits(phoneLength));
 
         return booking;
     }
@@ -70,5 +82,25 @@ public final class BookingBuilder {
         booking.setEmail(email);
 
         return booking;
+    }
+
+    private static String randomLetters(int length) {
+
+        return ThreadLocalRandom.current()
+                .ints(length, 'a', 'z' + 1)
+                .collect(StringBuilder::new,
+                        StringBuilder::appendCodePoint,
+                        StringBuilder::append)
+                .toString();
+    }
+
+    private static String randomDigits(int length) {
+
+        return ThreadLocalRandom.current()
+                .ints(length, 1, 10)
+                .collect(StringBuilder::new,
+                        (builder, digit) -> builder.append(digit),
+                        StringBuilder::append)
+                .toString();
     }
 }

@@ -82,7 +82,10 @@ public class CreateBookingSteps {
         booking = BookingBuilder.createBookingWithNameLengths(
                 firstnameLength, lastnameLength);
 
-        booking.setPhone("1".repeat(phoneLength));
+        booking.setPhone(String.valueOf(
+                java.util.concurrent.ThreadLocalRandom.current()
+                        .nextInt(1, 10)
+        ).repeat(phoneLength));
 
         requestBody = booking;
 
