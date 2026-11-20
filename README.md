@@ -365,7 +365,7 @@ The reports use timestamped filenames to distinguish different test executions.
 
 The framework generates interactive HTML execution reports with scenario-level results, execution status, and test details.
 
-![ExtentReports Execution Report](Screenshots/Execution Report.png)
+![ExtentReports Execution Report](Screenshots/Execution%20Report.png)
 
 The framework integrates **ExtentReports with Cucumber 7** using the ExtentReports Cucumber adapter.
 
@@ -389,23 +389,11 @@ src/test/resources/extent.properties
 target/extent-reports/
 ```
 
-Each execution generates a separate timestamped report directory, helping preserve previous execution reports.
-
-The current configuration uses `Spark.html` as the report filename inside the timestamped directory.
 
 ### Publishing Execution Reports to GitHub
 
 Generated ExtentReports can be committed to the repository to showcase test execution results.
 
-If the report is under the Git-ignored `target/` directory, a specific report file can be force-added without changing `.gitignore`:
-
-```bash
-git add -f target/extent-reports/<report-folder>/Spark.html
-git commit -m "Add ExtentReports execution results"
-git push origin main
-```
-
-Before publishing reports to a public repository, ensure that they do not contain credentials, authentication tokens, cookies, or other sensitive information.
 
 ### Other Maven Reports and Logs
 
