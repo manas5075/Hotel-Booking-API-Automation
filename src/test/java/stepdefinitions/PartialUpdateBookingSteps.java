@@ -1,8 +1,10 @@
-
 package stepdefinitions;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.InputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +81,34 @@ public class PartialUpdateBookingSteps {
         requestBody.put("depositpaid", value);
 
         sendPartialUpdateRequest(requestBody);
+    }
+
+    @When("I partially update the booking using test data {string}")
+    public void updateBookingUsingTestData(String fileName) {
+
+        String resourcePath = "testdata/partial-update/" + fileName;
+
+        try (InputStream inputStream =
+                getClass().getClassLoader()
+                        .getResourceAsStream(resourcePath)) {
+
+            assertNotNull(inputStream,
+                    "Test-data file not found: " + resourcePath);
+
+            String requestBody = new String(
+                    inputStream.readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+
+            sendPartialUpdateRequest(requestBody);
+
+        } catch (IOException exception) {
+
+            throw new AssertionError(
+                    "Could not read test-data file: " + resourcePath,
+                    exception
+            );
+        }
     }
 
     private void sendValidPartialUpdateRequest(Object requestBody) {
